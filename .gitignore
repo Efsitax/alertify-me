@@ -2,6 +2,8 @@
 /build/
 /.gradle/
 /out/
+*/build/
+*/out/
 
 # --- IntelliJ IDEA Settings ---
 # Ignore the whole .idea folder (recommended)
