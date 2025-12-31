@@ -1,0 +1,16 @@
+dependencies {
+    //common shared
+    implementation project(':common-shared')
+
+    //spring web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //rabbitmq
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+    //html parser jsoup
+    implementation 'org.jsoup:jsoup:1.18.3'
+
+    //browser automation playwright
+    implementation 'com.microsoft.playwright:playwright:1.49.0'
+}

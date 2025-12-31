@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.1' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.alertify'
+    version = '0.0.1-SNAPSHOT'
+
+    sourceCompatibility = '21'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        //lombok
+        compileOnly 'org.projectlombok:lombok:1.18.42'
+        annotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+        //junit
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        //webmvc test
+        testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}

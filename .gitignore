@@ -1,0 +1,17 @@
+# --- Gradle & Build Output ---
+/build/
+/.gradle/
+/out/
+
+# --- IntelliJ IDEA Settings ---
+# Ignore the whole .idea folder (recommended)
+/.idea/
+*.iml
+*.ipr
+*.iws
+
+# --- Mac OS System Files ---
+.DS_Store
+
+# --- Java Crash Logs ---
+hs_err_pid*
