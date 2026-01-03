@@ -1,13 +1,17 @@
 package com.alertify.scraper.adapter.out.scraping.strategies.impl;
 
+import com.alertify.common.exception.ResourceNotFoundException;
+import com.alertify.common.exception.ScrapeFailedException;
 import com.alertify.scraper.adapter.out.scraping.strategies.ScrapingStrategy;
 import com.alertify.scraper.domain.model.ScrapedProduct;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.TimeoutError;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.nio.file.Paths;
 
+@Slf4j
 @Component
 public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
 
@@ -19,32 +23,46 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
     @Override
     public ScrapedProduct scrape(Page page) {
         try {
-            page.waitForSelector("h1", new Page.WaitForSelectorOptions().setTimeout(15000));
-        } catch (Exception e) {
-            try {
-                page.screenshot(new Page.ScreenshotOptions()
-                        .setPath(Paths.get("hata-hepsiburada.png")).setFullPage(true));
-            } catch (Exception ex) {
-                // error
+            String title = page.title().toLowerCase();
+            if (title.contains("sayfa bulunamadı") || title.contains("böyle bir ürün yok")) {
+                throw new ResourceNotFoundException("Hepsiburada Product", "page", "Page Not Found");
             }
+            try {
+                page.waitForSelector("h1", new Page.WaitForSelectorOptions().setTimeout(15000));
+            } catch (TimeoutError e) {
+                throw new ScrapeFailedException("Timeout waiting for product title. Site might be slow or blocking.");
+            }
+
+            String productName;
+            if (page.locator("h1[data-test-id='title']").isVisible()) {
+                productName = page.locator("h1[data-test-id='title']").innerText();
+            } else if (page.locator("h1").isVisible()) {
+                productName = page.locator("h1").first().innerText();
+            } else {
+                throw new ScrapeFailedException("Product title selector not visible.");
+            }
+
+            boolean inStock = !page.locator("[data-test-id='out-of-stock-button']").isVisible() &&
+                    !page.locator("button:has-text('Gelince Haber Ver')").isVisible();
+
+            BigDecimal price = tryCustomSelectors(page);
+
+            if (inStock && price.compareTo(BigDecimal.ZERO) == 0) {
+                throw new ScrapeFailedException("Product is in stock but price could not be parsed.");
+            }
+
+            return ScrapedProduct.builder()
+                    .productName(productName.trim())
+                    .price(price)
+                    .currency("TRY")
+                    .shopName("Hepsiburada")
+                    .inStock(true)
+                    .build();
+        } catch (ResourceNotFoundException | ScrapeFailedException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ScrapeFailedException("Unexpected error during Hepsiburada scraping: " + e.getMessage());
         }
-
-        String productName = "Name not found";
-        if (page.locator("h1[data-test-id='title']").isVisible()) {
-            productName = page.locator("h1[data-test-id='title']").innerText();
-        } else if (page.locator("h1").isVisible()) {
-            productName = page.locator("h1").first().innerText();
-        }
-
-        BigDecimal price = tryCustomSelectors(page);
-
-        return ScrapedProduct.builder()
-                .productName(productName.trim())
-                .price(price)
-                .currency("TRY")
-                .shopName("Hepsiburada")
-                .inStock(true)
-                .build();
     }
 
     private BigDecimal tryCustomSelectors(Page page) {
@@ -57,8 +75,15 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
 
         for (String selector : selectors) {
             if (page.locator(selector).first().isVisible()) {
-                String rawText = page.locator(selector).first().innerText();
-                return parsePrice(rawText);
+                try {
+                    String rawText = page.locator(selector).first().innerText();
+                    BigDecimal parsedPrice = parsePrice(rawText);
+                    if (parsedPrice.compareTo(BigDecimal.ZERO) > 0) {
+                        return parsedPrice;
+                    }
+                } catch (Exception e) {
+                    log.warn("Failed to parse price with selector: {}", selector);
+                }
             }
         }
         return BigDecimal.ZERO;

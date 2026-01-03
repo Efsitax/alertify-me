@@ -8,8 +8,11 @@ public record TrackingResponse(
         UUID id,
         UUID userId,
         String url,
-        BigDecimal targetPrice,
+        String productName,
         BigDecimal currentPrice,
+        Boolean inStock,
+        String currency,
+        BigDecimal targetPrice,
         Boolean isActive,
         Instant lastCheckedAt,
         Instant createdAt

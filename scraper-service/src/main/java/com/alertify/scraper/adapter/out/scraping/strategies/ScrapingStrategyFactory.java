@@ -1,5 +1,6 @@
 package com.alertify.scraper.adapter.out.scraping.strategies;
 
+import com.alertify.common.exception.ScrapeFailedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,6 @@ public class ScrapingStrategyFactory {
         return strategies.stream()
                 .filter(strategy -> strategy.canScrape(url))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No scraping strategy found for URL: " + url));
+                .orElseThrow(() -> new ScrapeFailedException("No scraping strategy found for URL: " + url));
     }
 }

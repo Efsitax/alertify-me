@@ -18,8 +18,11 @@ public class TrackedProduct {
     private UUID id;
     private UUID userId;
     private String url;
-    private BigDecimal targetPrice;
+    private String productName;
     private BigDecimal currentPrice;
+    private Boolean inStock;
+    private String currency;
+    private BigDecimal targetPrice;
     private Boolean isActive;
     private Instant lastCheckedAt;
     private Instant createdAt;

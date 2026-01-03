@@ -25,8 +25,12 @@ public class TrackedProductEntity {
 
     @Column(nullable = false, length = 2048)
     private String url;
-    private BigDecimal targetPrice;
+    private String productName;
     private BigDecimal currentPrice;
+    private Boolean inStock;
+    @Column(length = 3)
+    private String currency;
+    private BigDecimal targetPrice;
     private Boolean isActive;
 
     @Column(updatable = false)

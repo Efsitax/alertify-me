@@ -58,8 +58,11 @@ The system consists of 4 fundamental microservices.
         * `id` (UUID, PK)
         * `user_id` (UUID) - *Reference ID from Identity Service*
         * `url` (TEXT)
-        * `target_price` (DECIMAL)
+        * `product_name` (VARCHAR 255)
         * `current_price` (DECIMAL) - *Denormalized for read performance*
+        * `in_stock` (BOOLEAN)
+        * `currency` (VARCHAR 3)
+        * `target_price` (DECIMAL)
         * `is_active` (BOOLEAN)
         * `last_checked_at` (TIMESTAMP)
     * **`price_histories` (Graph Data):**

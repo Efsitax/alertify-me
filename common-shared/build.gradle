@@ -14,6 +14,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
+    //rabbitmq
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
     //http lib
     implementation 'org.springframework:spring-web'
 }

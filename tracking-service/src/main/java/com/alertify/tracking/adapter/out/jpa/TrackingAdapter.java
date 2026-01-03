@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -41,10 +42,8 @@ public class TrackingAdapter implements TrackingPort {
     }
 
     @Override
-    public TrackedProduct findByProductId(UUID id) {
-        return repository.findById(id)
-                .map(mapper::toDomain)
-                .orElseThrow();
+    public Optional<TrackedProduct> findByProductId(UUID id) {
+        return repository.findById(id).map(mapper::toDomain);
     }
 
 }

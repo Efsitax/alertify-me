@@ -14,8 +14,11 @@ public class TrackedProductMapper {
                 domain.getId(),
                 domain.getUserId(),
                 domain.getUrl(),
-                domain.getTargetPrice(),
+                domain.getProductName(),
                 domain.getCurrentPrice(),
+                domain.getInStock(),
+                domain.getCurrency(),
+                domain.getTargetPrice(),
                 domain.getIsActive(),
                 domain.getLastCheckedAt(),
                 domain.getCreatedAt()
@@ -29,8 +32,11 @@ public class TrackedProductMapper {
                 .id(entity.getId())
                 .userId(entity.getUserId())
                 .url(entity.getUrl())
-                .targetPrice(entity.getTargetPrice())
+                .productName(entity.getProductName())
                 .currentPrice(entity.getCurrentPrice())
+                .inStock(entity.getInStock())
+                .currency(entity.getCurrency())
+                .targetPrice(entity.getTargetPrice())
                 .isActive(entity.getIsActive())
                 .lastCheckedAt(entity.getLastCheckedAt())
                 .createdAt(entity.getCreatedAt())

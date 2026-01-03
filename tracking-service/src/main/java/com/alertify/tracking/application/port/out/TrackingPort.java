@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TrackingPort {
@@ -13,5 +14,5 @@ public interface TrackingPort {
     TrackedProduct save(TrackedProduct trackedProduct);
     Page<TrackedProduct> findAllByUserId(UUID userId, Pageable pageable);
     List<TrackedProduct> findProductsToScan(Instant threshold, Pageable pageable);
-    TrackedProduct findByProductId(UUID id);
+    Optional<TrackedProduct> findByProductId(UUID id);
 }

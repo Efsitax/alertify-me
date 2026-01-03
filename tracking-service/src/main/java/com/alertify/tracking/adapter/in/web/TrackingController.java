@@ -84,8 +84,11 @@ public class TrackingController {
                 domain.getId(),
                 domain.getUserId(),
                 domain.getUrl(),
-                domain.getTargetPrice(),
+                domain.getProductName(),
                 domain.getCurrentPrice(),
+                domain.getInStock(),
+                domain.getCurrency(),
+                domain.getTargetPrice(),
                 domain.getIsActive(),
                 domain.getLastCheckedAt(),
                 domain.getCreatedAt()

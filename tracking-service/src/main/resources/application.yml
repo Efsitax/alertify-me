@@ -21,3 +21,7 @@ server:
 alertify:
   tracking:
     scan-interval-minutes: 30
+  rabbitmq:
+    exchange: scrape.exchange
+    routing-key: scrape.key
+    completed-queue: scrape.completed.queue
