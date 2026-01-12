@@ -22,7 +22,7 @@ alertify:
   tracking:
     scan-interval-minutes: 30
     scan-batch-size: 20
-    scheduler-rate-ms: 60000
+    scan-scheduler-rate-ms: 60000
   rabbitmq:
     exchange: scrape.exchange
     routing-key: scrape.key

@@ -59,7 +59,7 @@ public class TrackedProductMapper {
                 .lastCheckedAt(entity.getLastCheckedAt())
                 .createdAt(entity.getCreatedAt())
                 .priceHistory(entity.getPriceHistory() != null
-                        ? entity.getPriceHistory().stream().map(priceHistoryMapper::toDomain).toList()
+                        ? new ArrayList<>(entity.getPriceHistory().stream().map(priceHistoryMapper::toDomain).toList())
                         : new ArrayList<>())
                 .build();
     }

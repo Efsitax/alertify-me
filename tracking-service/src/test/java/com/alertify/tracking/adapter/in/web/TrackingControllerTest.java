@@ -6,6 +6,7 @@ import com.alertify.common.rest.GlobalExceptionHandler;
 import com.alertify.tracking.adapter.in.web.dto.request.CreateTrackingRequest;
 import com.alertify.tracking.adapter.in.web.dto.request.UpdateTrackingRequest;
 import com.alertify.tracking.application.port.in.TrackingUseCase;
+import com.alertify.tracking.domain.model.PriceHistory;
 import com.alertify.tracking.domain.model.TrackedProduct;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -246,5 +248,50 @@ public class TrackingControllerTest {
         mockMvc.perform(delete("/api/v1/trackings/{productId}", productId)
                         .param("userId", userId.toString()))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void shouldReturnHistory_WhenProductExists() throws Exception {
+        UUID productId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+
+        List<PriceHistory> historyList = List.of(
+                new PriceHistory(UUID.randomUUID(), productId, BigDecimal.valueOf(100), Instant.now().minusSeconds(3600)),
+                new PriceHistory(UUID.randomUUID(), productId, BigDecimal.valueOf(110), Instant.now())
+        );
+
+        when(trackingUseCase.getPriceHistory(eq(productId), eq(userId), any(Pageable.class)))
+                .thenReturn(historyList);
+
+        mockMvc.perform(get("/api/v1/trackings/{productId}/history", productId)
+                        .param("userId", userId.toString())
+                        .param("page", "0")
+                        .param("size", "10")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].price").value(100))
+                .andExpect(jsonPath("$[1].price").value(110));
+    }
+
+    @Test
+    void shouldReturnScanCandidates_WhenRequested() throws Exception {
+        TrackedProduct mockProduct = TrackedProduct.builder()
+                .id(UUID.randomUUID())
+                .url("https://test.com")
+                .productName("Test Product")
+                .targetPrice(BigDecimal.valueOf(100))
+                .isActive(true)
+                .build();
+
+        when(trackingUseCase.getProductsToScan(any(Instant.class), any(Pageable.class)))
+                .thenReturn(List.of(mockProduct));
+
+        mockMvc.perform(get("/api/v1/trackings/scan-candidates")
+                        .param("limit", "10")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].productName").value("Test Product"));
     }
 }

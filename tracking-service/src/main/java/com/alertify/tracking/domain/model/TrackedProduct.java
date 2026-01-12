@@ -34,7 +34,7 @@ public class TrackedProduct {
 
     public void updatePrice(BigDecimal newPrice, Instant detectedAt) {
         PriceHistory history = PriceHistory.builder()
-                .id(UUID.randomUUID())
+                .id(null)
                 .productId(this.id)
                 .price(newPrice)
                 .detectedAt(detectedAt)
