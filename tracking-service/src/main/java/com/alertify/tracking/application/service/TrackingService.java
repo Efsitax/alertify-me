@@ -6,6 +6,7 @@ import com.alertify.tracking.application.port.in.ScrapeResultsUseCase;
 import com.alertify.tracking.application.port.in.TrackingUseCase;
 import com.alertify.tracking.application.port.out.ScrapePort;
 import com.alertify.tracking.application.port.out.TrackingPort;
+import com.alertify.tracking.domain.model.PriceHistory;
 import com.alertify.tracking.domain.model.TrackedProduct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -102,6 +103,24 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<PriceHistory> getPriceHistory(UUID productId, UUID userId, Pageable pageable) {
+        Optional<TrackedProduct> trackedProductOpt = productPort.findByProductId(productId);
+
+        if (trackedProductOpt.isEmpty()) {
+            throw new ResourceNotFoundException("Tracked Product", "id", productId.toString());
+        }
+
+        TrackedProduct trackedProduct = trackedProductOpt.get();
+
+        if (!trackedProduct.getUserId().equals(userId)) {
+            throw new AccessDeniedException("You do not have permission to view the price history of this product.");
+        }
+
+        return productPort.findPriceHistoryByProductId(productId, pageable);
+    }
+
+    @Override
     @Transactional
     public boolean handleScrapeResult(
             UUID productId,
@@ -123,10 +142,10 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
         TrackedProduct trackedProduct = trackedProductOpt.get();
 
         trackedProduct.setProductName(productName);
-        trackedProduct.setCurrentPrice(price);
         trackedProduct.setInStock(inStock);
         trackedProduct.setCurrency(currency);
-        trackedProduct.setLastCheckedAt(checkedAt);
+
+        trackedProduct.updatePrice(price, checkedAt);
 
         productPort.save(trackedProduct);
         log.info("Price updated successfully for Product ID: {}. New Price: {} {}", productId, price, currency);

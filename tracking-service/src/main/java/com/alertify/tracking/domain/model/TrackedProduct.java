@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -26,4 +28,23 @@ public class TrackedProduct {
     private Boolean isActive;
     private Instant lastCheckedAt;
     private Instant createdAt;
+
+    @Builder.Default
+    private List<PriceHistory> priceHistory = new ArrayList<>();
+
+    public void updatePrice(BigDecimal newPrice, Instant detectedAt) {
+        PriceHistory history = PriceHistory.builder()
+                .id(UUID.randomUUID())
+                .productId(this.id)
+                .price(newPrice)
+                .detectedAt(detectedAt)
+                .build();
+        if (this.priceHistory == null) {
+            this.priceHistory = new ArrayList<>();
+        }
+        this.priceHistory.add(history);
+
+        this.currentPrice = newPrice;
+        this.lastCheckedAt = detectedAt;
+    }
 }

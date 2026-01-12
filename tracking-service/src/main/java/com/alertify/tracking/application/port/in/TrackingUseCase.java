@@ -1,5 +1,6 @@
 package com.alertify.tracking.application.port.in;
 
+import com.alertify.tracking.domain.model.PriceHistory;
 import com.alertify.tracking.domain.model.TrackedProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,6 @@ public interface TrackingUseCase {
     List<TrackedProduct> getProductsToScan(Instant threshold, Pageable pageable);
     TrackedProduct updateTrackedProduct(UUID userId, UUID productId, BigDecimal targetPrice, Boolean isActive);
     void deleteTrackedProduct(UUID productId, UUID userId);
+
+    List<PriceHistory> getPriceHistory(UUID productId, UUID userId, Pageable pageable);
 }

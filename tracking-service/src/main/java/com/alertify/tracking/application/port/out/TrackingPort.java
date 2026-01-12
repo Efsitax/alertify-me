@@ -1,5 +1,6 @@
 package com.alertify.tracking.application.port.out;
 
+import com.alertify.tracking.domain.model.PriceHistory;
 import com.alertify.tracking.domain.model.TrackedProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,6 @@ public interface TrackingPort {
     Page<TrackedProduct> findAllByUserId(UUID userId, Pageable pageable);
     List<TrackedProduct> findProductsToScan(Instant threshold, Pageable pageable);
     Optional<TrackedProduct> findByProductId(UUID id);
+
+    List<PriceHistory> findPriceHistoryByProductId(UUID productId, Pageable pageable);
 }

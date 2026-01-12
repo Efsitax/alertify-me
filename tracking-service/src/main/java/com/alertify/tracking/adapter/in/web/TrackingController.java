@@ -1,9 +1,11 @@
 package com.alertify.tracking.adapter.in.web;
 
 import com.alertify.tracking.adapter.in.web.dto.request.CreateTrackingRequest;
-import com.alertify.tracking.adapter.in.web.dto.TrackingResponse;
+import com.alertify.tracking.adapter.in.web.dto.response.PriceHistoryResponse;
+import com.alertify.tracking.adapter.in.web.dto.response.TrackingResponse;
 import com.alertify.tracking.adapter.in.web.dto.request.UpdateTrackingRequest;
 import com.alertify.tracking.application.port.in.TrackingUseCase;
+import com.alertify.tracking.domain.model.PriceHistory;
 import com.alertify.tracking.domain.model.TrackedProduct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,7 @@ public class TrackingController {
     ) {
         TrackedProduct createdProduct = useCase.createTrackedProduct(userId, request.url(), request.targetPrice());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(toResponse(createdProduct));
+                .body(toTrackingResponse(createdProduct));
     }
 
     @GetMapping("/user/{userId}")
@@ -44,7 +46,7 @@ public class TrackingController {
             Pageable pageable) {
         return ResponseEntity.ok(
                 useCase.getTrackedProducts(userId, pageable)
-                        .map(this::toResponse)
+                        .map(this::toTrackingResponse)
         );
     }
 
@@ -56,7 +58,7 @@ public class TrackingController {
         Pageable pageable = PageRequest.of(0, limit);
         return ResponseEntity.ok(
                 useCase.getProductsToScan(threshold, pageable).stream()
-                        .map(this::toResponse)
+                        .map(this::toTrackingResponse)
                         .toList()
         );
     }
@@ -68,7 +70,7 @@ public class TrackingController {
             @Valid @RequestBody UpdateTrackingRequest request
     ) {
         TrackedProduct updated = useCase.updateTrackedProduct(userId, productId, request.targetPrice(), request.isActive());
-        return ResponseEntity.ok(toResponse(updated));
+        return ResponseEntity.ok(toTrackingResponse(updated));
     }
 
     @DeleteMapping("/{productId}")
@@ -79,7 +81,19 @@ public class TrackingController {
         return ResponseEntity.noContent().build();
     }
 
-    private TrackingResponse toResponse(TrackedProduct domain) {
+    @GetMapping("/{productId}/history")
+    public ResponseEntity<List<PriceHistoryResponse>> getProductHistory(
+            @PathVariable UUID productId,
+            @RequestParam UUID userId,
+            Pageable pageable) {
+        return ResponseEntity.ok(
+                useCase.getPriceHistory(productId, userId, pageable).stream()
+                        .map(this::toPriceHistoryResponse)
+                        .toList()
+        );
+    }
+
+    private TrackingResponse toTrackingResponse(TrackedProduct domain) {
         return new TrackingResponse(
                 domain.getId(),
                 domain.getUserId(),
@@ -92,6 +106,13 @@ public class TrackingController {
                 domain.getIsActive(),
                 domain.getLastCheckedAt(),
                 domain.getCreatedAt()
+        );
+    }
+
+    private PriceHistoryResponse toPriceHistoryResponse(PriceHistory domain) {
+        return new PriceHistoryResponse(
+                domain.getPrice(),
+                domain.getDetectedAt()
         );
     }
 }

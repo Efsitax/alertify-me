@@ -1,4 +1,4 @@
-package com.alertify.tracking.adapter.in.web.dto;
+package com.alertify.tracking.adapter.in.web.dto.response;
 
 import java.math.BigDecimal;
 import java.time.Instant;

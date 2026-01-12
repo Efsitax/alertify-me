@@ -1,18 +1,18 @@
 package com.alertify.tracking.adapter.out.jpa.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "tracked_products")
 public class TrackedProductEntity {
 
@@ -36,6 +36,11 @@ public class TrackedProductEntity {
     @Column(updatable = false)
     private Instant createdAt;
     private Instant lastCheckedAt;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @Builder.Default
+    private List<PriceHistoryEntity> priceHistory;
 
     @PrePersist
     protected void onCreate() {
