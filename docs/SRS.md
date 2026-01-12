@@ -65,6 +65,7 @@ The system consists of 4 fundamental microservices.
         * `target_price` (DECIMAL)
         * `is_active` (BOOLEAN)
         * `last_checked_at` (TIMESTAMP)
+        * `created_at` (TIMESTAMP)
     * **`price_histories` (Graph Data):**
         * `id` (UUID, PK)
         * `product_id` (UUID, FK)

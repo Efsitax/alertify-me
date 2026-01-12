@@ -76,6 +76,21 @@ public class TrackingControllerTest {
     }
 
     @Test
+    void shouldReturnBadRequest_WhenCreateRequestHasInvalidData() throws Exception {
+        UUID userId = UUID.randomUUID();
+
+        CreateTrackingRequest request = new CreateTrackingRequest("", BigDecimal.valueOf(-1));
+
+        mockMvc.perform(post("/api/v1/trackings")
+                    .param("userId", userId.toString())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Validation Error"));
+    }
+
+    @Test
     void shouldReturnOk_WhenGettingTrackedProducts() throws Exception {
         UUID userId = UUID.randomUUID();
 
@@ -145,6 +160,32 @@ public class TrackingControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("Not Found"));
+    }
+
+    @Test
+    void shouldReturnBadRequest_WhenUpdatingOthersProduct() throws Exception {
+        UUID productId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+
+        UpdateTrackingRequest request = new UpdateTrackingRequest(
+                BigDecimal.valueOf(100),
+                true
+        );
+
+        when(trackingUseCase.updateTrackedProduct(
+                eq(userId),
+                eq(productId),
+                any(BigDecimal.class),
+                any(Boolean.class)
+        )).thenThrow(new AccessDeniedException("You do not have permission to update this tracked product."));
+
+        mockMvc.perform(put("/api/v1/trackings/{productId}", productId)
+                            .param("userId", userId.toString())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status").value(403))
+                .andExpect(jsonPath("$.error").value("Forbidden"));
     }
 
     @Test
