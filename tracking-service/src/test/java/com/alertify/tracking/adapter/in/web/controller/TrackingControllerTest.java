@@ -1,4 +1,4 @@
-package com.alertify.tracking.adapter.in.web;
+package com.alertify.tracking.adapter.in.web.controller;
 
 import com.alertify.common.exception.AccessDeniedException;
 import com.alertify.common.exception.ResourceNotFoundException;

@@ -1,4 +1,4 @@
-package com.alertify.tracking.adapter.in.web;
+package com.alertify.tracking.adapter.in.web.controller;
 
 import com.alertify.tracking.adapter.in.web.dto.request.CreateTrackingRequest;
 import com.alertify.tracking.adapter.in.web.dto.response.PriceHistoryResponse;

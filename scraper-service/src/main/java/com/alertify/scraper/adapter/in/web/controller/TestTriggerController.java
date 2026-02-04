@@ -1,4 +1,4 @@
-package com.alertify.scraper.adapter.in.web;
+package com.alertify.scraper.adapter.in.web.controller;
 
 import com.alertify.common.event.ScrapeRequestEvent;
 import lombok.RequiredArgsConstructor;
