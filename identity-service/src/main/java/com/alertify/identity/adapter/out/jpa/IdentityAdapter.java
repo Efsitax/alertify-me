@@ -23,4 +23,9 @@ public class IdentityAdapter implements IdentityPort {
     public boolean validateEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    @Override
+    public User findByEmail(String email) {
+        return userMapper.toDomain(userRepository.findByEmail(email).orElse(null));
+    }
 }

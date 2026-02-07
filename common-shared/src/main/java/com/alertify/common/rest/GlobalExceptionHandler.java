@@ -1,6 +1,9 @@
 package com.alertify.common.rest;
 
 import com.alertify.common.exception.AlertifyException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -51,6 +54,22 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    @ExceptionHandler({
+            ExpiredJwtException.class,
+            SignatureException.class,
+            MalformedJwtException.class
+    })
+    public ResponseEntity<ErrorResponse> handleJwtExceptions(Exception ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Authentication Failed",
+                ex.getMessage(),
+                null,
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)

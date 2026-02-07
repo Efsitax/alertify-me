@@ -5,4 +5,5 @@ import com.alertify.identity.domain.model.User;
 public interface IdentityUseCase {
 
     User register(String email, String password, String firstName, String lastName);
+    User login(String email, String password);
 }

@@ -1,9 +1,12 @@
 package com.alertify.identity.adapter.in.web.controller;
 
+import com.alertify.identity.adapter.in.web.dto.request.LoginRequest;
 import com.alertify.identity.adapter.in.web.dto.request.RegisterRequest;
+import com.alertify.identity.adapter.in.web.dto.response.AuthResponse;
 import com.alertify.identity.adapter.in.web.dto.response.UserResponse;
 import com.alertify.identity.application.port.in.IdentityUseCase;
 import com.alertify.identity.domain.model.User;
+import com.alertify.identity.infrastucture.utils.JwtProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final IdentityUseCase useCase;
+    private final JwtProvider jwtProvider;
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(
@@ -30,15 +34,32 @@ public class AuthController {
                 request.firstName(),
                 request.lastName()
         );
-        UserResponse response = new UserResponse(
-                createdUser.getId(),
-                createdUser.getEmail(),
-                createdUser.getFirstName(),
-                createdUser.getLastName(),
-                createdUser.getCreatedAt()
-        );
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(response);
+                .body(toUserResponse(createdUser));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(
+            @Valid @RequestBody LoginRequest request
+    ) {
+        User user = useCase.login(request.email(), request.password());
+        String token = jwtProvider.generateToken(user);
+        return ResponseEntity
+                .ok(AuthResponse.of(
+                        token,
+                        toUserResponse(user),
+                        jwtProvider.getExpirationMillis()
+                ));
+    }
+
+    private UserResponse toUserResponse(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getCreatedAt()
+        );
     }
 }

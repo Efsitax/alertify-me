@@ -6,4 +6,5 @@ public interface IdentityPort {
 
     User register(User user);
     boolean validateEmail(String email);
+    User findByEmail(String email);
 }

@@ -1,5 +1,6 @@
 package com.alertify.identity.application.service;
 
+import com.alertify.common.exception.BadCredentialsException;
 import com.alertify.common.exception.ResourceAlreadyExistsException;
 import com.alertify.identity.application.port.in.IdentityUseCase;
 import com.alertify.identity.application.port.out.IdentityPort;
@@ -32,5 +33,16 @@ public class IdentityService implements IdentityUseCase {
         User savedUser = identityPort.register(user);
         log.info("New User created User ID: {} ", savedUser.getId());
         return savedUser;
+    }
+
+    @Override
+    public User login(String email, String password) {
+
+        User user = identityPort.findByEmail(email);
+        if (user == null || !passwordEncoder.matches(password, user.getPasswordHash())) {
+            throw new BadCredentialsException("Invalid email or password");
+        }
+        log.info("User logged in User ID: {} ", user.getId());
+        return user;
     }
 }

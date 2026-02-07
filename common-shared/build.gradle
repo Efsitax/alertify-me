@@ -17,6 +17,9 @@ dependencies {
     //rabbitmq
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
+    // jwt exceptions
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+
     //http lib
     implementation 'org.springframework:spring-web'
 }
