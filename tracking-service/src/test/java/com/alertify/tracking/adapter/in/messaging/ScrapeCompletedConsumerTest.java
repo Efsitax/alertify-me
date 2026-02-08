@@ -44,6 +44,7 @@ class ScrapeCompletedConsumerTest {
 
     @Test
     void should_Process_Successfully_When_UseCase_Returns_True() {
+
         when(useCase.handleScrapeResult(
                 eq(productId),
                 anyString(),
@@ -67,6 +68,7 @@ class ScrapeCompletedConsumerTest {
 
     @Test
     void should_Log_Warning_But_Succeed_When_UseCase_Returns_False() {
+
         when(useCase.handleScrapeResult(any(), any(), any(), anyBoolean(), any(), any()))
                 .thenReturn(false);
         assertDoesNotThrow(() -> consumer.consumeScrapeResult(validEvent));
@@ -75,6 +77,7 @@ class ScrapeCompletedConsumerTest {
 
     @Test
     void should_Throw_Exception_When_UseCase_Fails() {
+
         doThrow(new RuntimeException("Database connection failed"))
                 .when(useCase).handleScrapeResult(any(), any(), any(), anyBoolean(), any(), any());
         assertThrows(RuntimeException.class, () -> consumer.consumeScrapeResult(validEvent));

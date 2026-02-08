@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
     public UserEntity toEntity(User domain) {
+
         if(domain == null) return null;
 
         return UserEntity.builder()
@@ -17,10 +18,12 @@ public class UserMapper {
                 .firstName(domain.getFirstName())
                 .lastName(domain.getLastName())
                 .createdAt(domain.getCreatedAt())
+                .isDeleted(domain.getIsDeleted())
                 .build();
     }
 
     public User toDomain(UserEntity entity) {
+
         if(entity == null) return null;
 
         return User.builder()
@@ -30,6 +33,7 @@ public class UserMapper {
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .createdAt(entity.getCreatedAt())
+                .isDeleted(entity.getIsDeleted())
                 .build();
     }
 }

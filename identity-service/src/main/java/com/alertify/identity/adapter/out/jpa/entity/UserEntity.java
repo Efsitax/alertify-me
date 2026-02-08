@@ -32,12 +32,17 @@ public class UserEntity {
 
     @Column(nullable = false, length = 50)
     private String lastName;
+    private Boolean isDeleted;
 
     @Column(updatable = false)
     private Instant createdAt;
 
     @PrePersist
     protected void onCreate() {
+
         createdAt = Instant.now();
+            if (isDeleted == null) {
+                isDeleted = false;
+            }
     }
 }

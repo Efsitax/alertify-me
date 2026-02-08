@@ -49,6 +49,7 @@ The system consists of 4 fundamental microservices.
     * `password_hash` (VARCHAR 255)
     * `first_name` (VARCHAR 50)
     * `last_name` (VARCHAR 50)
+    * `is_active` (BOOLEAN)
     * `created_at` (TIMESTAMP)
 
 ### 3.2. Tracking Service

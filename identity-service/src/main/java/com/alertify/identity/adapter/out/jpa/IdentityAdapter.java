@@ -7,6 +7,8 @@ import com.alertify.identity.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class IdentityAdapter implements IdentityPort {
@@ -15,7 +17,7 @@ public class IdentityAdapter implements IdentityPort {
     private final UserMapper userMapper;
 
     @Override
-    public User register(User user) {
+    public User saveUser(User user) {
         return userMapper.toDomain(userRepository.save(userMapper.toEntity(user)));
     }
 
@@ -27,5 +29,10 @@ public class IdentityAdapter implements IdentityPort {
     @Override
     public User findByEmail(String email) {
         return userMapper.toDomain(userRepository.findByEmail(email).orElse(null));
+    }
+
+    @Override
+    public User findById(UUID id) {
+        return userMapper.toDomain(userRepository.findById(id).orElse(null));
     }
 }

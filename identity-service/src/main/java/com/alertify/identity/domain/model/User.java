@@ -19,5 +19,6 @@ public class User {
     private String passwordHash;
     private String firstName;
     private String lastName;
+    private Boolean isDeleted;
     private Instant createdAt;
 }

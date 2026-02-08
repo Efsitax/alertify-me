@@ -23,6 +23,7 @@ public class PlaywrightAdapter implements ScraperPort {
 
     @Override
     public ScrapedProduct fetchProduct(String url) {
+
         ScrapingStrategy strategy = factory.getStrategy(url);
 
         List<String> args = Arrays.asList(

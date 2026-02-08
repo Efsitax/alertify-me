@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -40,9 +40,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
+        final String userId;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -55,11 +57,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtProvider.validateToken(jwt))
             {
                 userEmail = jwtProvider.getEmailFromToken(jwt);
+                userId = jwtProvider.getUserIdFromToken(jwt);
 
-                if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (userEmail != null && userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    AuthenticatedUser authenticatedUser = AuthenticatedUser.builder()
+                            .id(UUID.fromString(userId))
+                            .email(userEmail)
+                            .build();
 
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userEmail,
+                            authenticatedUser,
                             null,
                             Collections.emptyList()
                     );
