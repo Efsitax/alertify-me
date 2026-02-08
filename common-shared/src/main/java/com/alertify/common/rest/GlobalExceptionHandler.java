@@ -38,6 +38,7 @@ public class GlobalExceptionHandler {
             AlertifyException ex,
             WebRequest request
     ) {
+
         HttpStatus status = ex.getStatus();
         String path = request.getDescription(false).replace("uri=", "");
 
@@ -56,6 +57,7 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException ex,
             WebRequest request
     ) {
+
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String path = request.getDescription(false).replace("uri=", "");
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
@@ -77,7 +79,10 @@ public class GlobalExceptionHandler {
             SignatureException.class,
             MalformedJwtException.class
     })
-    public ResponseEntity<ErrorResponse> handleJwtExceptions(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleJwtExceptions(
+            Exception ex
+    ) {
+
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.UNAUTHORIZED.value(),
                 "Authentication Failed",
@@ -92,6 +97,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGeneralException(
             WebRequest request
     ) {
+
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         String path = request.getDescription(false).replace("uri=", "");
 

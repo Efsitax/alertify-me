@@ -23,7 +23,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public UserEntity toEntity(User domain) {
+    public UserEntity toEntity(
+            User domain
+    ) {
 
         if(domain == null) return null;
 
@@ -38,7 +40,9 @@ public class UserMapper {
                 .build();
     }
 
-    public User toDomain(UserEntity entity) {
+    public User toDomain(
+            UserEntity entity
+    ) {
 
         if(entity == null) return null;
 

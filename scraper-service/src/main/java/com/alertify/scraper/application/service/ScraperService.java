@@ -29,7 +29,9 @@ public class ScraperService implements ScrapeUseCase {
     private final ScraperPort port;
 
     @Override
-    public ScrapedProduct getScrapedProduct(String url) {
+    public ScrapedProduct getScrapedProduct(
+            String url
+    ) {
         return port.fetchProduct(url);
     }
 }

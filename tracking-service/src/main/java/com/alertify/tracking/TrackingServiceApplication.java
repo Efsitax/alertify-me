@@ -23,7 +23,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication(scanBasePackages = {"com.alertify.tracking", "com.alertify.common"})
 public class TrackingServiceApplication {
-    public static void main(String[] args) {
+    public static void main(
+            String[] args
+    ) {
         SpringApplication.run(TrackingServiceApplication.class, args);
     }
 }

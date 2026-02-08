@@ -41,7 +41,9 @@ public class TestTriggerController {
     private String routingKey;
 
     @GetMapping("/send")
-    public String sendTestMessage(@RequestParam String url) {
+    public String sendTestMessage(
+            @RequestParam String url
+    ) {
 
         ScrapeRequestEvent event = new ScrapeRequestEvent(UUID.randomUUID(), url);
         rabbitTemplate.convertAndSend(exchangeName, routingKey, event);

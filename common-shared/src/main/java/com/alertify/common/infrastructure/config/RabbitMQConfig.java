@@ -101,6 +101,7 @@ public class RabbitMQConfig {
     @Bean
     @Primary
     public MessageConverter converter() {
+
         SimpleMessageConverter converter = new SimpleMessageConverter();
         converter.setAllowedListPatterns(List.of(
                 "com.alertify.*",
@@ -113,6 +114,7 @@ public class RabbitMQConfig {
 
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+
         RabbitAdmin admin = new RabbitAdmin(connectionFactory);
         admin.setAutoStartup(true);
         return admin;
@@ -120,6 +122,7 @@ public class RabbitMQConfig {
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter converter) {
+
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
         template.setMessageConverter(converter);
         return template;

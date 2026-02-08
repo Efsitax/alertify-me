@@ -31,7 +31,9 @@ public class ScrapeCompletedConsumer {
     private final ScrapeResultsUseCase useCase;
 
     @RabbitListener(queues = "${alertify.rabbitmq.completed-queue}")
-    public void consumeScrapeResult(PriceScrapeCompletedEvent event) {
+    public void consumeScrapeResult(
+            PriceScrapeCompletedEvent event
+    ) {
 
         log.info("Scrape result received. ID: {} | Product: {} | Price: {}",
                 event.getProductId(), event.getProductName(), event.getPrice());

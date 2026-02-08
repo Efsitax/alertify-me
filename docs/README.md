@@ -88,7 +88,7 @@ alertify-me/
     ```bash
     docker-compose up -d
     ```
-3. **Run Services**: You can run each service individually using `./gradlew :<service-name>:bootRun.
+3. **Run Services**: You can run each service individually using `./gradlew :<service-name>:bootRun`.
 
 ## 🔒 Standard Error Handling
 

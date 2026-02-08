@@ -47,7 +47,11 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
 
     @Override
     @Transactional
-    public TrackedProduct createTrackedProduct(UUID userId, String url, BigDecimal targetPrice) {
+    public TrackedProduct createTrackedProduct(
+            UUID userId,
+            String url,
+            BigDecimal targetPrice
+    ) {
 
         TrackedProduct domain = TrackedProduct.builder()
                 .userId(userId)
@@ -65,19 +69,30 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<TrackedProduct> getTrackedProducts(UUID userId, Pageable pageable) {
+    public Page<TrackedProduct> getTrackedProducts(
+            UUID userId,
+            Pageable pageable
+    ) {
         return productPort.findAllByUserId(userId, pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<TrackedProduct> getProductsToScan(Instant threshold, Pageable pageable) {
+    public List<TrackedProduct> getProductsToScan(
+            Instant threshold,
+            Pageable pageable
+    ) {
         return productPort.findProductsToScan(threshold, pageable);
     }
 
     @Override
     @Transactional
-    public TrackedProduct updateTrackedProduct(UUID userId, UUID productId, BigDecimal targetPrice, Boolean isActive) {
+    public TrackedProduct updateTrackedProduct(
+            UUID userId,
+            UUID productId,
+            BigDecimal targetPrice,
+            Boolean isActive
+    ) {
 
         Optional<TrackedProduct> trackedProductOpt = productPort.findByProductId(productId);
 
@@ -102,7 +117,10 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
 
     @Override
     @Transactional
-    public void deleteTrackedProduct(UUID productId, UUID userId) {
+    public void deleteTrackedProduct(
+            UUID productId,
+            UUID userId
+    ) {
 
         Optional<TrackedProduct> trackedProductOpt = productPort.findByProductId(productId);
 
@@ -123,7 +141,11 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PriceHistory> getPriceHistory(UUID productId, UUID userId, Pageable pageable) {
+    public List<PriceHistory> getPriceHistory(
+            UUID productId,
+            UUID userId,
+            Pageable pageable
+    ) {
 
         Optional<TrackedProduct> trackedProductOpt = productPort.findByProductId(productId);
 

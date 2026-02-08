@@ -31,7 +31,9 @@ public class TrackedProductMapper {
 
     private final PriceHistoryMapper priceHistoryMapper;
 
-    public TrackedProductEntity toEntity(TrackedProduct domain) {
+    public TrackedProductEntity toEntity(
+            TrackedProduct domain
+    ) {
 
         if (domain == null) return null;
 
@@ -60,7 +62,9 @@ public class TrackedProductMapper {
         return entity;
     }
 
-    public TrackedProduct toDomain(TrackedProductEntity entity) {
+    public TrackedProduct toDomain(
+            TrackedProductEntity entity
+    ) {
 
         if (entity == null) return null;
 

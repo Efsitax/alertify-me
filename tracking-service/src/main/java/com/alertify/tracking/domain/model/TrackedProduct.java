@@ -48,7 +48,11 @@ public class TrackedProduct {
     @Builder.Default
     private List<PriceHistory> priceHistory = new ArrayList<>();
 
-    public void updatePrice(BigDecimal newPrice, Instant detectedAt) {
+    public void updatePrice(
+            BigDecimal newPrice,
+            Instant detectedAt
+    ) {
+
         PriceHistory history = PriceHistory.builder()
                 .id(null)
                 .productId(this.id)

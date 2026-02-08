@@ -32,12 +32,16 @@ import java.math.BigDecimal;
 public class AmazonScrapingStrategy implements ScrapingStrategy {
 
     @Override
-    public boolean canScrape(String url) {
+    public boolean canScrape(
+            String url
+    ) {
         return url.contains("amazon");
     }
 
     @Override
-    public ScrapedProduct scrape(Page page) {
+    public ScrapedProduct scrape(
+            Page page
+    ) {
 
         try {
             page.waitForLoadState(LoadState.DOMCONTENTLOADED);

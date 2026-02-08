@@ -49,7 +49,10 @@ public abstract class BaseStrategyTest {
     }
 
     @SuppressWarnings("SameParameterValue")
-    protected void mockTextContent(String selector, String text) {
+    protected void mockTextContent(
+            String selector,
+            String text
+    ) {
 
         Locator specificLocator = mock(Locator.class);
 

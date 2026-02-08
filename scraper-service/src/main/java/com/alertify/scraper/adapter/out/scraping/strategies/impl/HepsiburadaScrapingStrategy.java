@@ -32,12 +32,16 @@ import java.math.BigDecimal;
 public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
 
     @Override
-    public boolean canScrape(String url) {
+    public boolean canScrape(
+            String url
+    ) {
         return url.contains("hepsiburada.com");
     }
 
     @Override
-    public ScrapedProduct scrape(Page page) {
+    public ScrapedProduct scrape(
+            Page page
+    ) {
 
         try {
             String title = page.title().toLowerCase();
@@ -82,7 +86,9 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
         }
     }
 
-    private BigDecimal tryCustomSelectors(Page page) {
+    private BigDecimal tryCustomSelectors(
+            Page page
+    ) {
 
         String[] selectors = {
                 "[data-test-id='checkout-price'] div:nth-child(2)",
@@ -107,7 +113,9 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
         return BigDecimal.ZERO;
     }
 
-    private BigDecimal parsePrice(String rawPrice) {
+    private BigDecimal parsePrice(
+            String rawPrice
+    ) {
 
         if (rawPrice == null) return BigDecimal.ZERO;
         try {

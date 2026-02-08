@@ -60,7 +60,8 @@ public class TrackingController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<Page<TrackingResponse>> getUserTrackings(
             @PathVariable UUID userId,
-            Pageable pageable) {
+            Pageable pageable
+    ) {
         return ResponseEntity.ok(
                 useCase.getTrackedProducts(userId, pageable)
                         .map(this::toTrackingResponse)
@@ -95,7 +96,8 @@ public class TrackingController {
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteTracking(
             @PathVariable UUID productId,
-            @RequestParam UUID userId) {
+            @RequestParam UUID userId
+    ) {
 
         useCase.deleteTrackedProduct(productId, userId);
         return ResponseEntity.noContent().build();
@@ -105,7 +107,8 @@ public class TrackingController {
     public ResponseEntity<List<PriceHistoryResponse>> getProductHistory(
             @PathVariable UUID productId,
             @RequestParam UUID userId,
-            Pageable pageable) {
+            Pageable pageable
+    ) {
         return ResponseEntity.ok(
                 useCase.getPriceHistory(productId, userId, pageable).stream()
                         .map(this::toPriceHistoryResponse)
@@ -113,7 +116,9 @@ public class TrackingController {
         );
     }
 
-    private TrackingResponse toTrackingResponse(TrackedProduct domain) {
+    private TrackingResponse toTrackingResponse(
+            TrackedProduct domain
+    ) {
         return new TrackingResponse(
                 domain.getId(),
                 domain.getUserId(),
@@ -129,7 +134,9 @@ public class TrackingController {
         );
     }
 
-    private PriceHistoryResponse toPriceHistoryResponse(PriceHistory domain) {
+    private PriceHistoryResponse toPriceHistoryResponse(
+            PriceHistory domain
+    ) {
         return new PriceHistoryResponse(
                 domain.getPrice(),
                 domain.getDetectedAt()

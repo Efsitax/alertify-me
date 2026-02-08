@@ -22,11 +22,5 @@ import java.util.UUID;
 
 public interface ScrapeResultsUseCase {
 
-    boolean handleScrapeResult(
-            UUID productId,
-            String productName,
-            BigDecimal price,
-            Boolean inStock,
-            String currency,
-            Instant checkedAt);
+    boolean handleScrapeResult(UUID productId, String productName, BigDecimal price, Boolean inStock, String currency, Instant checkedAt);
 }

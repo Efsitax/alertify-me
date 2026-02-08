@@ -31,12 +31,16 @@ import java.math.BigDecimal;
 public class TrendyolScrapingStrategy implements ScrapingStrategy {
 
     @Override
-    public boolean canScrape(String url) {
+    public boolean canScrape(
+            String url
+    ) {
         return url.contains("trendyol.com");
     }
 
     @Override
-    public ScrapedProduct scrape(Page page) {
+    public ScrapedProduct scrape(
+            Page page
+    ) {
 
         try {
             String title = page.title().toLowerCase();
@@ -84,7 +88,9 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
         }
     }
 
-    private BigDecimal tryCssSelectors(Locator priceWrapper) {
+    private BigDecimal tryCssSelectors(
+            Locator priceWrapper
+    ) {
 
         String[] selectors = {
                 ".discounted",
@@ -104,7 +110,9 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
         return BigDecimal.ZERO;
     }
 
-    private BigDecimal parsePrice(String rawPrice) {
+    private BigDecimal parsePrice(
+            String rawPrice
+    ) {
 
         String cleanPrice = rawPrice
                 .replace("TL", "")

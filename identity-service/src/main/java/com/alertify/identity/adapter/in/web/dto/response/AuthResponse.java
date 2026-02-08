@@ -22,7 +22,11 @@ public record AuthResponse(
         UserResponse user,
         long expiresIn
 ) {
-    public static AuthResponse of(String token, UserResponse userResponse, long expirationMillis) {
+    public static AuthResponse of(
+            String token,
+            UserResponse userResponse,
+            long expirationMillis
+    ) {
         return new AuthResponse(token, "Bearer", userResponse, expirationMillis);
     }
 }

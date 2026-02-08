@@ -81,8 +81,8 @@ public class TrackingControllerTest {
 
         when(trackingUseCase.createTrackedProduct(
                 eq(userId),
-                eq("https://test.com/"),
-                eq(BigDecimal.valueOf(150))
+                eq(request.url()),
+                eq(request.targetPrice())
         )).thenReturn(mockProduct);
 
         mockMvc.perform(post("/api/v1/trackings")

@@ -41,7 +41,10 @@ public class ScrapeMessageProducer implements ScrapePort {
     private String routingKey;
 
     @Override
-    public void sendScrapeRequest(UUID productId, String url) {
+    public void sendScrapeRequest(
+            UUID productId,
+            String url
+    ) {
 
         ScrapeRequestEvent event = new ScrapeRequestEvent(productId, url);
 

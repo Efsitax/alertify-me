@@ -23,7 +23,9 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.alertify.scraper", "com.alertify.common"})
 public class ScraperServiceApplication {
-    public static void main(String[] args) {
+    public static void main(
+            String[] args
+    ) {
         SpringApplication.run(ScraperServiceApplication.class, args);
     }
 }

@@ -29,6 +29,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PriceScrapeCompletedEvent implements Serializable {
+
     private UUID productId;
     private String url;
     private String productName;

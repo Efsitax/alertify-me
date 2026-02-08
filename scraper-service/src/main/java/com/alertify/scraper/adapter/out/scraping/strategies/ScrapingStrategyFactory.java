@@ -28,7 +28,9 @@ public class ScrapingStrategyFactory {
 
     private final List<ScrapingStrategy> strategies;
 
-    public ScrapingStrategy getStrategy(String url) {
+    public ScrapingStrategy getStrategy(
+            String url
+    ) {
         return strategies.stream()
                 .filter(strategy -> strategy.canScrape(url))
                 .findFirst()

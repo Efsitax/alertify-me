@@ -44,7 +44,9 @@ public class TrackingAdapter implements TrackingPort {
     private final PriceHistoryMapper priceHistoryMapper;
 
     @Override
-    public TrackedProduct save(TrackedProduct trackedProduct) {
+    public TrackedProduct save(
+            TrackedProduct trackedProduct
+    ) {
 
         var entity = trackedProductMapper.toEntity(trackedProduct);
         var savedEntity = trackedProductRepository.save(entity);
@@ -52,25 +54,36 @@ public class TrackingAdapter implements TrackingPort {
     }
 
     @Override
-    public Page<TrackedProduct> findAllByUserId(UUID userId, Pageable pageable) {
+    public Page<TrackedProduct> findAllByUserId(
+            UUID userId,
+            Pageable pageable
+    ) {
         return trackedProductRepository.findAllByUserId(userId, pageable)
                 .map(trackedProductMapper::toDomain);
     }
 
     @Override
-    public List<TrackedProduct> findProductsToScan(Instant threshold, Pageable pageable) {
+    public List<TrackedProduct> findProductsToScan(
+            Instant threshold,
+            Pageable pageable
+    ) {
         return trackedProductRepository.findProductsToScan(threshold, pageable).stream()
                 .map(trackedProductMapper::toDomain)
                 .toList();
     }
 
     @Override
-    public Optional<TrackedProduct> findByProductId(UUID id) {
+    public Optional<TrackedProduct> findByProductId(
+            UUID id
+    ) {
         return trackedProductRepository.findById(id).map(trackedProductMapper::toDomain);
     }
 
     @Override
-    public List<PriceHistory> findPriceHistoryByProductId(UUID productId, Pageable pageable) {
+    public List<PriceHistory> findPriceHistoryByProductId(
+            UUID productId,
+            Pageable pageable
+    ) {
         return  priceHistoryRepository.findByProductIdOrderByDetectedAtDesc(productId, pageable).stream()
                 .map(priceHistoryMapper::toDomain)
                 .toList();

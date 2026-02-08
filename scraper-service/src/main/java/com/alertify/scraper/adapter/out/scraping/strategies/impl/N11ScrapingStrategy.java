@@ -35,12 +35,16 @@ import java.util.regex.Pattern;
 public class N11ScrapingStrategy implements ScrapingStrategy {
 
     @Override
-    public boolean canScrape(String url) {
+    public boolean canScrape(
+            String url
+    ) {
         return url.contains("n11.com");
     }
 
     @Override
-    public ScrapedProduct scrape(Page page) {
+    public ScrapedProduct scrape(
+            Page page
+    ) {
 
         String title = page.title().toLowerCase();
         if (title.contains("sayfa bulunamadı") || title.contains("404")) {
@@ -83,7 +87,9 @@ public class N11ScrapingStrategy implements ScrapingStrategy {
                 .build();
     }
 
-    private BigDecimal findPriceGuaranteed(Page page) {
+    private BigDecimal findPriceGuaranteed(
+            Page page
+    ) {
 
         String[] metaSelectors = {
                 "meta[property='product:price:amount']",
@@ -129,7 +135,9 @@ public class N11ScrapingStrategy implements ScrapingStrategy {
         return BigDecimal.ZERO;
     }
 
-    private BigDecimal parsePrice(String rawPrice) {
+    private BigDecimal parsePrice(
+            String rawPrice
+    ) {
 
         if (rawPrice == null) return BigDecimal.ZERO;
         try {

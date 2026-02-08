@@ -24,7 +24,10 @@ public abstract class AlertifyException extends RuntimeException {
 
     protected final HttpStatus status;
 
-    public AlertifyException(HttpStatus status, String message) {
+    public AlertifyException(
+            HttpStatus status,
+            String message
+    ) {
         super(message);
         this.status = status;
     }

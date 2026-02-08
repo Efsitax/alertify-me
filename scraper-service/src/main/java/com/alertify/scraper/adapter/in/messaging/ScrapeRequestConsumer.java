@@ -46,7 +46,9 @@ public class ScrapeRequestConsumer {
     private String completedRoutingKey;
 
     @RabbitListener(queues = "${alertify.rabbitmq.queue}")
-    public void consumeMessage(ScrapeRequestEvent event) {
+    public void consumeMessage(
+            ScrapeRequestEvent event
+    ) {
 
         log.info("Scrape Request received for Product ID: {} | URL: {}", event.getProductId(), event.getUrl());
         try {

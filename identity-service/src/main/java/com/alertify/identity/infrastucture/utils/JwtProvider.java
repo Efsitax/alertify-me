@@ -49,7 +49,9 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(User User){
+    public String generateToken(
+            User User
+    ) {
         return Jwts.builder()
                 .subject(User.getEmail())
                 .claim("userId", User.getId())
@@ -63,7 +65,9 @@ public class JwtProvider {
         return this.expiration;
     }
 
-    public String getEmailFromToken(String token) {
+    public String getEmailFromToken(
+            String token
+    ) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -72,7 +76,9 @@ public class JwtProvider {
                 .getSubject();
     }
 
-    public String getUserIdFromToken(String token) {
+    public String getUserIdFromToken(
+            String token
+    ) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -81,7 +87,9 @@ public class JwtProvider {
                 .get("userId", String.class);
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(
+            String token
+    ) {
 
         try {
             Jwts.parser()

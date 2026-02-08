@@ -27,6 +27,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScrapeRequestEvent implements Serializable {
+
     private UUID productId;
     private String url;
 }

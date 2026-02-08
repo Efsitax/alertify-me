@@ -36,7 +36,9 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http
+    ) {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)

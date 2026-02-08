@@ -33,22 +33,30 @@ public class IdentityAdapter implements IdentityPort {
     private final UserMapper userMapper;
 
     @Override
-    public User saveUser(User user) {
+    public User saveUser(
+            User user
+    ) {
         return userMapper.toDomain(userRepository.save(userMapper.toEntity(user)));
     }
 
     @Override
-    public boolean validateEmail(String email) {
+    public boolean validateEmail(
+            String email
+    ) {
         return userRepository.existsByEmail(email);
     }
 
     @Override
-    public User findByEmail(String email) {
+    public User findByEmail(
+            String email
+    ) {
         return userMapper.toDomain(userRepository.findByEmail(email).orElse(null));
     }
 
     @Override
-    public User findById(UUID id) {
+    public User findById(
+            UUID id
+    ) {
         return userMapper.toDomain(userRepository.findById(id).orElse(null));
     }
 }

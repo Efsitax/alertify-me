@@ -22,7 +22,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserWebMapper {
-    public UserResponse toResponse(User user) {
+    public UserResponse toResponse(
+            User user
+    ) {
 
         if (user == null) return null;
         return new UserResponse(

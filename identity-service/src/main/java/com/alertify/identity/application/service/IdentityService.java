@@ -40,7 +40,12 @@ public class IdentityService implements IdentityUseCase {
 
     @Override
     @Transactional
-    public User register(String email, String password, String firstName, String lastName) {
+    public User register(
+            String email,
+            String password,
+            String firstName,
+            String lastName
+    ) {
 
         if (identityPort.validateEmail(email)) {
             throw new ResourceAlreadyExistsException("User", "email", email);
@@ -58,7 +63,10 @@ public class IdentityService implements IdentityUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public User login(String email, String password) {
+    public User login(
+            String email,
+            String password
+    ) {
 
         User user = identityPort.findByEmail(email);
         if (user == null || !passwordEncoder.matches(password, user.getPasswordHash())) {
@@ -70,7 +78,9 @@ public class IdentityService implements IdentityUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public User getUserById(UUID userId) {
+    public User getUserById(
+            UUID userId
+    ) {
 
         User user = identityPort.findById(userId);
         if (user == null || user.getIsDeleted()) {
@@ -82,7 +92,12 @@ public class IdentityService implements IdentityUseCase {
 
     @Override
     @Transactional
-    public User updateUser(UUID id, String email, String firstName, String lastName) {
+    public User updateUser(
+            UUID id,
+            String email,
+            String firstName,
+            String lastName
+    ) {
 
         User user = identityPort.findById(id);
         if (user == null || user.getIsDeleted()) {
