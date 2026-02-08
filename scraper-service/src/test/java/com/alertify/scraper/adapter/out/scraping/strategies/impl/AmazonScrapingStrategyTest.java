@@ -23,6 +23,7 @@ public class AmazonScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Scrape_Correctly_When_Product_Exists() {
+
         // mocking page title
         String productName = "iPhone 15 128GB";
         when(page.title()).thenReturn("Amazon.com.tr: iPhone 15");
@@ -61,6 +62,7 @@ public class AmazonScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Detect_When_Product_Is_Out_Of_Stock() {
+
         when(page.title()).thenReturn("Amazon Product");
         mockTextContent("span#productTitle", "PlayStation 5");
 
@@ -94,6 +96,7 @@ public class AmazonScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Throw_ResourceNotFound_When_Dogs_Image_Visible() {
+
         when(page.title()).thenReturn("Amazon");
 
         // Mock "Dogs of Amazon" image being visible
@@ -106,6 +109,7 @@ public class AmazonScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Throw_ScrapeFailed_When_Captcha_Form_Visible() {
+
         lenient().when(page.title()).thenReturn("Amazon");
 
         // Mock Captcha form

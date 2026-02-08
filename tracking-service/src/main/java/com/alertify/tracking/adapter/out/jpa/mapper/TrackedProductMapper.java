@@ -16,6 +16,7 @@ public class TrackedProductMapper {
     private final PriceHistoryMapper priceHistoryMapper;
 
     public TrackedProductEntity toEntity(TrackedProduct domain) {
+
         if (domain == null) return null;
 
         TrackedProductEntity entity = TrackedProductEntity.builder()
@@ -44,6 +45,7 @@ public class TrackedProductMapper {
     }
 
     public TrackedProduct toDomain(TrackedProductEntity entity) {
+
         if (entity == null) return null;
 
         return TrackedProduct.builder()

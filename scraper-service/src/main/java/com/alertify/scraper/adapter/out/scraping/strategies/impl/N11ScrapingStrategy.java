@@ -68,6 +68,7 @@ public class N11ScrapingStrategy implements ScrapingStrategy {
     }
 
     private BigDecimal findPriceGuaranteed(Page page) {
+
         String[] metaSelectors = {
                 "meta[property='product:price:amount']",
                 "meta[property='og:price:amount']",
@@ -113,6 +114,7 @@ public class N11ScrapingStrategy implements ScrapingStrategy {
     }
 
     private BigDecimal parsePrice(String rawPrice) {
+
         if (rawPrice == null) return BigDecimal.ZERO;
         try {
             String cleanPrice = rawPrice

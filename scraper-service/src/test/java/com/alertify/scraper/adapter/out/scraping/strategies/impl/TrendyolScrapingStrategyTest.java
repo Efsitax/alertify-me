@@ -28,6 +28,7 @@ public class TrendyolScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Scrape_Correctly_When_Product_In_Stock() {
+
         // mocking page title
         when(page.title()).thenReturn("Trendyol: Mavi Kazak");
         mockTextContent("h1.pr-new-br", "Mavi Jeans Erkek Kazak");
@@ -55,6 +56,7 @@ public class TrendyolScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Detect_Out_Of_Stock_When_Button_Visible() {
+
         // mocking page title
         when(page.title()).thenReturn("Trendyol Ürün");
         mockTextContent("h1.pr-new-br", "Tükenmiş Ürün");
@@ -83,12 +85,14 @@ public class TrendyolScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Throw_ResourceNotFound_When_Page_Not_Found() {
+
         when(page.title()).thenReturn("Sayfa Bulunamadı - Trendyol");
         assertThrows(ResourceNotFoundException.class, () -> strategy.scrape(page));
     }
 
     @Test
     void should_Throw_ScrapeFailed_When_Timeout_Occurs() {
+
         when(page.title()).thenReturn("Standard Title");
 
         // simulating timeout on waitForSelector
@@ -99,6 +103,7 @@ public class TrendyolScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Parse_Messy_Price_Format_Correctly() {
+
         when(page.title()).thenReturn("Test");
         mockTextContent("h1.pr-new-br", "Test Product");
 

@@ -21,6 +21,7 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
 
     @Override
     public ScrapedProduct scrape(Page page) {
+
         try {
             String title = page.title().toLowerCase();
             if (title.contains("sayfa bulunamadı") || title.contains("aradığınız sayfayı bulamadık")) {
@@ -68,6 +69,7 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
     }
 
     private BigDecimal tryCssSelectors(Locator priceWrapper) {
+
         String[] selectors = {
                 ".discounted",
                 ".ty-plus-price-discounted-price",
@@ -87,6 +89,7 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
     }
 
     private BigDecimal parsePrice(String rawPrice) {
+
         String cleanPrice = rawPrice
                 .replace("TL", "")
                 .replace(" ", "")

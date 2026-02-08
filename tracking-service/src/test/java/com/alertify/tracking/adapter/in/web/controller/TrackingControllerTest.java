@@ -47,6 +47,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnCreated_WhenRequestIsValid() throws Exception {
+
         UUID userId = UUID.randomUUID();
 
         CreateTrackingRequest request = new CreateTrackingRequest(
@@ -79,6 +80,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnBadRequest_WhenCreateRequestHasInvalidData() throws Exception {
+
         UUID userId = UUID.randomUUID();
 
         CreateTrackingRequest request = new CreateTrackingRequest("", BigDecimal.valueOf(-1));
@@ -94,6 +96,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnOk_WhenGettingTrackedProducts() throws Exception {
+
         UUID userId = UUID.randomUUID();
 
         List<TrackedProduct> productList = List.of(
@@ -115,6 +118,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnBadRequest_WhenPriceIsNegative() throws Exception {
+
         UUID productId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
@@ -134,6 +138,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnNotFound_WhenProductDoesNotExist() throws Exception {
+
         UUID productId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
@@ -166,6 +171,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnBadRequest_WhenUpdatingOthersProduct() throws Exception {
+
         UUID productId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
@@ -192,6 +198,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnOk_WhenRequestIsValid() throws Exception {
+
         UUID productId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
@@ -226,6 +233,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnForbidden_WhenUserIsNotOwner() throws Exception {
+
         UUID productId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
@@ -240,6 +248,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnNoContent_WhenDeletingProduct() throws Exception {
+
         UUID productId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
@@ -252,6 +261,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnHistory_WhenProductExists() throws Exception {
+
         UUID productId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
@@ -276,6 +286,7 @@ public class TrackingControllerTest {
 
     @Test
     void shouldReturnScanCandidates_WhenRequested() throws Exception {
+
         TrackedProduct mockProduct = TrackedProduct.builder()
                 .id(UUID.randomUUID())
                 .url("https://test.com")

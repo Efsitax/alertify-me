@@ -26,6 +26,7 @@ public class ScrapeMessageProducer implements ScrapePort {
 
     @Override
     public void sendScrapeRequest(UUID productId, String url) {
+
         ScrapeRequestEvent event = new ScrapeRequestEvent(productId, url);
 
         log.info("Preparing to send scrape request. Product ID: {} | URL: {}", productId, url);

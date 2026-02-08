@@ -34,12 +34,14 @@ class TrackingSchedulerTest {
 
     @BeforeEach
     void setUp() {
+
         ReflectionTestUtils.setField(scheduler, "scanIntervalMinutes", 30);
         ReflectionTestUtils.setField(scheduler, "batchSize", 10);
     }
 
     @Test
     void should_DoNothing_When_NoProductsToScan() {
+
         when(trackingUseCase.getProductsToScan(any(Instant.class), any(Pageable.class)))
                 .thenReturn(Collections.emptyList());
 
@@ -50,6 +52,7 @@ class TrackingSchedulerTest {
 
     @Test
     void should_SendScrapeRequests_When_ProductsFound() {
+
         TrackedProduct product1 = TrackedProduct.builder()
                 .id(UUID.randomUUID())
                 .url("https://site.com/p1")
@@ -71,6 +74,7 @@ class TrackingSchedulerTest {
 
     @Test
     void should_ContinueProcessing_When_OneRequestFails() {
+
         TrackedProduct product1 = TrackedProduct.builder()
                 .id(UUID.randomUUID())
                 .url("https://site.com/p1")

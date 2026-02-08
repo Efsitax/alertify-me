@@ -29,6 +29,7 @@ class HepsiburadaScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Scrape_Correctly_When_Primary_Price_Selector_Works() {
+
         // mocking page title
         when(page.title()).thenReturn("Hepsiburada: Laptop");
 
@@ -55,6 +56,7 @@ class HepsiburadaScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Scrape_Using_Fallback_Selector_When_Primary_Fails() {
+
         when(page.title()).thenReturn("HB Ürün");
 
         Locator mainTitleLoc = mock(Locator.class);
@@ -90,12 +92,14 @@ class HepsiburadaScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Throw_ResourceNotFound_When_Page_Is_404() {
+
         when(page.title()).thenReturn("Sayfa Bulunamadı - Hepsiburada");
         assertThrows(ResourceNotFoundException.class, () -> strategy.scrape(page));
     }
 
     @Test
     void should_Throw_ScrapeFailed_When_Timeout_Occurs() {
+
         when(page.title()).thenReturn("Normal Title");
 
         // simulate Timeout
@@ -106,6 +110,7 @@ class HepsiburadaScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Handle_Messy_Price_Format() {
+
         when(page.title()).thenReturn("HB");
         mockTextContent("h1[data-test-id='title']", "Test Product");
 
@@ -123,6 +128,7 @@ class HepsiburadaScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Throw_Exception_When_InStock_But_Price_Zero() {
+
         when(page.title()).thenReturn("HB");
         mockTextContent("h1[data-test-id='title']", "Stokta Var Ama Fiyat Yok");
         assertThrows(ScrapeFailedException.class, () -> strategy.scrape(page),

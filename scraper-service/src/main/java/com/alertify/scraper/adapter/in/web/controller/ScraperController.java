@@ -16,6 +16,7 @@ public class ScraperController {
 
     @GetMapping("/api/v1/scrape")
     public ResponseEntity<ScrapedProduct> scrapeProduct(@RequestParam String url) {
+
         ScrapedProduct product = useCase.getScrapedProduct(url);
         return ResponseEntity.ok(product);
     }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class PriceHistoryMapper {
 
     public PriceHistoryEntity toEntity(PriceHistory domain) {
+
         if (domain == null) return null;
 
         return PriceHistoryEntity.builder()
@@ -20,6 +21,7 @@ public class PriceHistoryMapper {
     }
 
     public PriceHistory toDomain(PriceHistoryEntity entity) {
+
         if (entity == null) return null;
 
         return PriceHistory.builder()

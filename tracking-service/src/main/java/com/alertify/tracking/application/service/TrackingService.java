@@ -32,6 +32,7 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
     @Override
     @Transactional
     public TrackedProduct createTrackedProduct(UUID userId, String url, BigDecimal targetPrice) {
+
         TrackedProduct domain = TrackedProduct.builder()
                 .userId(userId)
                 .url(url)
@@ -61,6 +62,7 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
     @Override
     @Transactional
     public TrackedProduct updateTrackedProduct(UUID userId, UUID productId, BigDecimal targetPrice, Boolean isActive) {
+
         Optional<TrackedProduct> trackedProductOpt = productPort.findByProductId(productId);
 
         if (trackedProductOpt.isEmpty()) {
@@ -85,6 +87,7 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
     @Override
     @Transactional
     public void deleteTrackedProduct(UUID productId, UUID userId) {
+
         Optional<TrackedProduct> trackedProductOpt = productPort.findByProductId(productId);
 
         if (trackedProductOpt.isEmpty()) {
@@ -105,6 +108,7 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<PriceHistory> getPriceHistory(UUID productId, UUID userId, Pageable pageable) {
+
         Optional<TrackedProduct> trackedProductOpt = productPort.findByProductId(productId);
 
         if (trackedProductOpt.isEmpty()) {
@@ -130,6 +134,7 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
             String currency,
             Instant checkedAt
     ) {
+
         log.info("Processing scrape result for Product ID: {}", productId);
 
         Optional<TrackedProduct> trackedProductOpt = productPort.findByProductId(productId);

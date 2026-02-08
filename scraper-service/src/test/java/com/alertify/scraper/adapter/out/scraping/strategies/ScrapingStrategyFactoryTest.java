@@ -32,6 +32,7 @@ public class ScrapingStrategyFactoryTest {
 
     @Test
     void should_Return_Correct_Strategy_When_Url_Is_Supported() {
+
         String url = "https://www.amazon.com.tr/example-product";
 
         lenient().when(amazonStrategy.canScrape(url)).thenReturn(true);
@@ -45,6 +46,7 @@ public class ScrapingStrategyFactoryTest {
 
     @Test
     void should_Throw_Exception_When_No_Strategy_Found() {
+
         String url = "https://www.unkown-site.com/example-product";
 
         lenient().when(amazonStrategy.canScrape(url)).thenReturn(false);

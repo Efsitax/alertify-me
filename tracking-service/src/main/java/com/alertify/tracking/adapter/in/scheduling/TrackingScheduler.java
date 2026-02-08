@@ -31,6 +31,7 @@ public class TrackingScheduler {
 
     @Scheduled(fixedRateString = "${alertify.tracking.scan-scheduler-rate-ms}", initialDelay = 10000)
     public void scheduleScraping() {
+
         log.info("Cron Job triggered: Checking for products to scrape...");
 
         Instant threshold = Instant.now().minus(scanIntervalMinutes, ChronoUnit.MINUTES);

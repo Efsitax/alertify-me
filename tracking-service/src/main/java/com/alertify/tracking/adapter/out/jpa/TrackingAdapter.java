@@ -29,6 +29,7 @@ public class TrackingAdapter implements TrackingPort {
 
     @Override
     public TrackedProduct save(TrackedProduct trackedProduct) {
+
         var entity = trackedProductMapper.toEntity(trackedProduct);
         var savedEntity = trackedProductRepository.save(entity);
         return trackedProductMapper.toDomain(savedEntity);

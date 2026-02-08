@@ -29,6 +29,7 @@ class N11ScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Scrape_Price_From_Meta_Tags_First() {
+
         when(page.title()).thenReturn("N11 Product");
         mockTextContent("h1.proName", "Laptop");
 
@@ -50,6 +51,7 @@ class N11ScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Scrape_Price_From_JsonLD_When_Meta_Tags_Missing() {
+
         when(page.title()).thenReturn("N11");
         mockTextContent("h1.proName", "Mobile Phone");
 
@@ -73,6 +75,7 @@ class N11ScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Scrape_Price_From_HTML_When_Others_Fail() {
+
         when(page.title()).thenReturn("N11");
         mockTextContent("h1.proName", "Tablet");
 
@@ -97,6 +100,7 @@ class N11ScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Detect_Out_Of_Stock_Correctly() {
+
         when(page.title()).thenReturn("N11");
         mockTextContent("h1.proName", "Tükenmiş Ürün");
 
@@ -119,12 +123,14 @@ class N11ScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Throw_ResourceNotFound_When_404() {
+
         when(page.title()).thenReturn("Sayfa Bulunamadı - n11.com");
         assertThrows(ResourceNotFoundException.class, () -> strategy.scrape(page));
     }
 
     @Test
     void should_Throw_ScrapeFailed_When_Title_Wait_Timeout() {
+
         when(page.title()).thenReturn("Normal Title");
         when(page.waitForSelector(anyString(), any(Page.WaitForSelectorOptions.class)))
                 .thenThrow(new TimeoutError("Timeout"));
@@ -133,6 +139,7 @@ class N11ScrapingStrategyTest extends BaseStrategyTest {
 
     @Test
     void should_Throw_ScrapeFailed_When_InStock_But_Price_Zero() {
+
         when(page.title()).thenReturn("N11");
         mockTextContent("h1.proName", "Faulty Product");
         assertThrows(ScrapeFailedException.class, () -> strategy.scrape(page));

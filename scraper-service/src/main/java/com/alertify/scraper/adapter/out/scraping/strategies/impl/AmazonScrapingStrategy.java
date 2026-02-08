@@ -22,6 +22,7 @@ public class AmazonScrapingStrategy implements ScrapingStrategy {
 
     @Override
     public ScrapedProduct scrape(Page page) {
+
         try {
             page.waitForLoadState(LoadState.DOMCONTENTLOADED);
 

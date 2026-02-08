@@ -35,12 +35,14 @@ class ScrapeMessageProducerTest {
 
     @BeforeEach
     void setUp() {
+
         ReflectionTestUtils.setField(producer, "exchange", EXCHANGE);
         ReflectionTestUtils.setField(producer, "routingKey", ROUTING_KEY);
     }
 
     @Test
     void should_Send_ScrapeRequest_Successfully() {
+
         producer.sendScrapeRequest(productId, url);
 
         ArgumentCaptor<ScrapeRequestEvent> eventCaptor = ArgumentCaptor.forClass(ScrapeRequestEvent.class);
@@ -58,6 +60,7 @@ class ScrapeMessageProducerTest {
 
     @Test
     void should_Wrap_AmqpException_In_RuntimeException() {
+
         doThrow(new AmqpException("Connection refused"))
                 .when(rabbitTemplate).convertAndSend(anyString(), anyString(), any(Object.class));
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
@@ -68,6 +71,7 @@ class ScrapeMessageProducerTest {
 
     @Test
     void should_Wrap_GenericException_In_RuntimeException() {
+
         doThrow(new NullPointerException("Oops"))
                 .when(rabbitTemplate).convertAndSend(anyString(), anyString(), any(Object.class));
         RuntimeException exception = assertThrows(RuntimeException.class, () ->

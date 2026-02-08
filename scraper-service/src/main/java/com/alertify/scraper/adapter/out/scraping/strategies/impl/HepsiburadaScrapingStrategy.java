@@ -22,6 +22,7 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
 
     @Override
     public ScrapedProduct scrape(Page page) {
+
         try {
             String title = page.title().toLowerCase();
             if (title.contains("sayfa bulunamadı") || title.contains("böyle bir ürün yok")) {
@@ -66,6 +67,7 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
     }
 
     private BigDecimal tryCustomSelectors(Page page) {
+
         String[] selectors = {
                 "[data-test-id='checkout-price'] div:nth-child(2)",
                 "[data-test-id='non-premium-price'] b",
@@ -90,6 +92,7 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
     }
 
     private BigDecimal parsePrice(String rawPrice) {
+
         if (rawPrice == null) return BigDecimal.ZERO;
         try {
             String cleanPrice = rawPrice.split("\n")[0]

@@ -43,6 +43,7 @@ public class ScrapeRequestConsumerTest {
 
     @BeforeEach
     void  setUp() {
+
         ReflectionTestUtils.setField(consumer, "exchange", EXCHANGE);
         ReflectionTestUtils.setField(consumer, "completedRoutingKey", ROUTING_KEY);
 
@@ -52,6 +53,7 @@ public class ScrapeRequestConsumerTest {
 
     @Test
     void should_Process_Successfully_And_Send_Event() {
+
         ScrapedProduct scrapedProduct = ScrapedProduct.builder()
                 .productName("iPhone 15")
                 .price(new BigDecimal("50000"))
@@ -80,6 +82,7 @@ public class ScrapeRequestConsumerTest {
 
     @Test
     void should_Not_Retry_When_ResourceNotFoundException_Occurs() {
+
         doThrow(new ResourceNotFoundException("Product", "id", "404"))
                 .when(port).fetchProduct(validEvent.getUrl());
         assertDoesNotThrow(() -> consumer.consumeMessage(validEvent));
@@ -88,6 +91,7 @@ public class ScrapeRequestConsumerTest {
 
     @Test
     void should_Throw_Exception_To_Trigger_Retry_When_ScrapeFailed() {
+
         doThrow(new ScrapeFailedException("Timeout"))
                 .when(port).fetchProduct(validEvent.getUrl());
         assertThrows(
@@ -99,6 +103,7 @@ public class ScrapeRequestConsumerTest {
 
     @Test
     void should_Throw_RuntimeException_On_Unexpected_Error() {
+
         doThrow(new RuntimeException("Unexpected Bug"))
                 .when(port).fetchProduct(validEvent.getUrl());
         RuntimeException exception = assertThrows(RuntimeException.class, () -> consumer.consumeMessage(validEvent));

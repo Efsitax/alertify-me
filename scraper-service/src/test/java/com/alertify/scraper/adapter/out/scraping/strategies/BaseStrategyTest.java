@@ -22,6 +22,7 @@ public abstract class BaseStrategyTest {
 
     @BeforeEach
     void setUpBase() {
+
         lenient().when(page.locator(anyString())).thenReturn(locator);
 
         lenient().when(locator.locator(anyString())).thenReturn(locator);
@@ -33,6 +34,7 @@ public abstract class BaseStrategyTest {
 
     @SuppressWarnings("SameParameterValue")
     protected void mockTextContent(String selector, String text) {
+
         Locator specificLocator = mock(Locator.class);
 
         lenient().when(page.locator(selector)).thenReturn(specificLocator);

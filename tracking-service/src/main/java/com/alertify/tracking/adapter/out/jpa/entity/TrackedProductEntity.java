@@ -45,6 +45,7 @@ public class TrackedProductEntity {
 
     @PrePersist
     protected void onCreate() {
+
         createdAt = Instant.now();
         if (isActive == null) {
             isActive = true;

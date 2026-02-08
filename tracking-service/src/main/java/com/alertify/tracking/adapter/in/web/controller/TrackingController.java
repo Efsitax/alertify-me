@@ -35,6 +35,7 @@ public class TrackingController {
             @RequestParam UUID userId,
             @Valid @RequestBody CreateTrackingRequest request
     ) {
+
         TrackedProduct createdProduct = useCase.createTrackedProduct(userId, request.url(), request.targetPrice());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(toTrackingResponse(createdProduct));
@@ -54,6 +55,7 @@ public class TrackingController {
     public ResponseEntity<List<TrackingResponse>> getProductsToScan(
             @RequestParam(defaultValue = "10") int limit
     ) {
+
         Instant threshold = Instant.now().minus(scanIntervalMinutes, java.time.temporal.ChronoUnit.MINUTES);
         Pageable pageable = PageRequest.of(0, limit);
         return ResponseEntity.ok(
@@ -69,6 +71,7 @@ public class TrackingController {
             @RequestParam UUID userId,
             @Valid @RequestBody UpdateTrackingRequest request
     ) {
+
         TrackedProduct updated = useCase.updateTrackedProduct(userId, productId, request.targetPrice(), request.isActive());
         return ResponseEntity.ok(toTrackingResponse(updated));
     }
@@ -77,6 +80,7 @@ public class TrackingController {
     public ResponseEntity<Void> deleteTracking(
             @PathVariable UUID productId,
             @RequestParam UUID userId) {
+
         useCase.deleteTrackedProduct(productId, userId);
         return ResponseEntity.noContent().build();
     }
