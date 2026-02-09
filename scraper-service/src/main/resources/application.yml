@@ -7,6 +7,15 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      type: simple
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 2000ms
+          multiplier: 2.0
+          max-retries: 3
+        default-requeue-rejected: false
 
 alertify:
   rabbitmq:

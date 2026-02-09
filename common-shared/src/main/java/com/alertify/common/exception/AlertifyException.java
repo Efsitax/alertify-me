@@ -23,12 +23,19 @@ import org.springframework.http.HttpStatus;
 public abstract class AlertifyException extends RuntimeException {
 
     protected final HttpStatus status;
+    protected final String errorReason;
 
     public AlertifyException(
             HttpStatus status,
+            String errorReason,
             String message
     ) {
         super(message);
         this.status = status;
+        this.errorReason = errorReason;
+    }
+
+    public String getError() {
+        return errorReason != null ? errorReason : this.getClass().getSimpleName();
     }
 }

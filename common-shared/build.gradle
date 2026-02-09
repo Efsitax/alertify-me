@@ -37,5 +37,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
 
     //http lib
+    compileOnly 'jakarta.servlet:jakarta.servlet-api'
     implementation 'org.springframework:spring-web'
 }

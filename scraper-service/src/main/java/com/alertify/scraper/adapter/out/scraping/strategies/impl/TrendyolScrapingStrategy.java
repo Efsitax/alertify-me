@@ -51,7 +51,7 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
             try {
                 page.waitForSelector("h1", new Page.WaitForSelectorOptions().setTimeout(15000));
             } catch (TimeoutError e) {
-                throw new ScrapeFailedException("Timeout waiting for Trendyol product title. Network or blocking issue.");
+                throw new ScrapeFailedException("Timeout waiting for Trendyol product title. Network or blocking issue.", true);
             }
 
             String productName;
@@ -60,7 +60,7 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
             } else if (page.locator("h1").isVisible()) {
                 productName = page.locator("h1").first().innerText();
             } else {
-                throw new ScrapeFailedException("Product title selector not visible on Trendyol.");
+                throw new ScrapeFailedException("Product title selector not visible on Trendyol.", false);
             }
 
             boolean inStock = !page.locator(".sold-out-icon").isVisible() &&
@@ -70,7 +70,7 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
             BigDecimal price = tryCssSelectors(page.locator(".price-wrapper").first());
 
             if (inStock && price.compareTo(BigDecimal.ZERO) == 0) {
-                throw new ScrapeFailedException("Product is in stock but price could not be parsed.");
+                throw new ScrapeFailedException("Product is in stock but price could not be parsed.", false);
             }
 
             return ScrapedProduct.builder()
@@ -84,7 +84,7 @@ public class TrendyolScrapingStrategy implements ScrapingStrategy {
         } catch (ResourceNotFoundException | ScrapeFailedException e) {
             throw e;
         } catch (Exception e) {
-            throw new ScrapeFailedException("Unexpected error during Trendyol scraping: " + e.getMessage());
+            throw new ScrapeFailedException("Unexpected error during Trendyol scraping: " + e.getMessage(), false);
         }
     }
 

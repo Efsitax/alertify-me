@@ -54,7 +54,7 @@ public class N11ScrapingStrategy implements ScrapingStrategy {
         try {
             page.waitForSelector("h1", new Page.WaitForSelectorOptions().setTimeout(15000));
         } catch (TimeoutError e) {
-            throw new ScrapeFailedException("Timeout waiting for N11 product title. Verification/Captcha required?");
+            throw new ScrapeFailedException("Timeout waiting for N11 product title. Verification/Captcha required?", true);
         }
 
         String productName;
@@ -65,7 +65,7 @@ public class N11ScrapingStrategy implements ScrapingStrategy {
         } else if (page.locator("h1").isVisible()) {
             productName = page.locator("h1").first().innerText();
         } else {
-            throw new ScrapeFailedException("Product title selector not visible on N11.");
+            throw new ScrapeFailedException("Product title selector not visible on N11.", false);
         }
 
         boolean inStock = !page.locator(".outOfStock").isVisible() &&
@@ -75,7 +75,7 @@ public class N11ScrapingStrategy implements ScrapingStrategy {
         BigDecimal price = findPriceGuaranteed(page);
 
         if (inStock && price.compareTo(BigDecimal.ZERO) == 0) {
-            throw new ScrapeFailedException("Product is in stock but price could not be parsed.");
+            throw new ScrapeFailedException("Product is in stock but price could not be parsed.", false);
         }
 
         return ScrapedProduct.builder()

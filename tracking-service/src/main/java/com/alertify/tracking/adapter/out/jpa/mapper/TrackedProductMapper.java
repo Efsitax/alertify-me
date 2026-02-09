@@ -47,8 +47,9 @@ public class TrackedProductMapper {
                 .currency(domain.getCurrency())
                 .targetPrice(domain.getTargetPrice())
                 .isActive(domain.getIsActive())
-                .lastCheckedAt(domain.getLastCheckedAt())
+                .updatedAt(domain.getUpdatedAt())
                 .createdAt(domain.getCreatedAt())
+                .lastCheckedAt(domain.getLastCheckedAt())
                 .build();
 
         if (domain.getPriceHistory() != null && !domain.getPriceHistory().isEmpty()) {
@@ -78,8 +79,9 @@ public class TrackedProductMapper {
                 .currency(entity.getCurrency())
                 .targetPrice(entity.getTargetPrice())
                 .isActive(entity.getIsActive())
-                .lastCheckedAt(entity.getLastCheckedAt())
                 .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .lastCheckedAt(entity.getLastCheckedAt())
                 .priceHistory(entity.getPriceHistory() != null
                         ? new ArrayList<>(entity.getPriceHistory().stream().map(priceHistoryMapper::toDomain).toList())
                         : new ArrayList<>())

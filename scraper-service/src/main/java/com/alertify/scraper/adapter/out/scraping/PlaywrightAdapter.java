@@ -82,18 +82,18 @@ public class PlaywrightAdapter implements ScraperPort {
 
         } catch (TimeoutError e) {
             log.error("Playwright Timeout Error for URL: {}", url);
-            throw new ScrapeFailedException("Timeout during navigation or scraping: " + e.getMessage());
+            throw new ScrapeFailedException("Timeout during navigation or scraping: " + e.getMessage(), true);
 
         } catch (PlaywrightException e) {
             log.error("Playwright General Error: {}", e.getMessage());
-            throw new ScrapeFailedException("Playwright unexpected error: " + e.getMessage());
+            throw new ScrapeFailedException("Playwright unexpected error: " + e.getMessage(), false);
 
         } catch (ResourceNotFoundException | ScrapeFailedException e) {
             throw e;
 
         } catch (Exception e) {
             log.error("Unexpected Java Error in PlaywrightAdapter", e);
-            throw new ScrapeFailedException("Internal Scraper Error: " + e.getMessage());
+            throw new ScrapeFailedException("Internal Scraper Error: " + e.getMessage(), false);
         }
     }
 }

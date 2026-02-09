@@ -30,7 +30,8 @@ public record TrackingResponse(
         String currency,
         BigDecimal targetPrice,
         Boolean isActive,
-        Instant lastCheckedAt,
-        Instant createdAt
+        Instant createdAt,
+        Instant updatedAt,
+        Instant lastCheckedAt
 ) {
 }

@@ -24,6 +24,7 @@ import com.alertify.common.exception.ScrapeFailedException;
 import com.alertify.scraper.domain.model.ScrapedProduct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,8 +72,13 @@ public class ScrapeRequestConsumer {
             log.warn("Permanent Error (Will NOT retry): {}", e.getMessage());
 
         } catch (ScrapeFailedException e) {
-            log.error("Transient Error (Will RETRY): {}", e.getMessage());
-            throw e;
+            if (e.isTransient()) {
+                log.warn("Transient error detected (Retryable): {}", e.getMessage());
+                throw e;
+            } else {
+                log.error("Permanent scrape error (To DLQ): {}", e.getMessage());
+                throw new org.springframework.amqp.AmqpRejectAndDontRequeueException(e);
+            }
 
         } catch (Exception e) {
             log.error("Unexpected Critical Error (Sending to DLQ): {}", e.getMessage(), e);

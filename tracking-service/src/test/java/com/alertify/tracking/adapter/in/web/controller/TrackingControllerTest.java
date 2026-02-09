@@ -17,6 +17,7 @@
 package com.alertify.tracking.adapter.in.web.controller;
 
 import com.alertify.common.exception.AccessDeniedException;
+import com.alertify.common.exception.ResourceAlreadyExistsException;
 import com.alertify.common.exception.ResourceNotFoundException;
 import com.alertify.common.rest.GlobalExceptionHandler;
 import com.alertify.tracking.adapter.in.web.dto.request.CreateTrackingRequest;
@@ -40,6 +41,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -106,8 +108,7 @@ public class TrackingControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.error").value("Validation Error"));
+                .andExpect(jsonPath("$.errorReason").value("VALIDATION_ERROR"));
     }
 
     @Test
@@ -148,8 +149,7 @@ public class TrackingControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.error").value("Validation Error"));
+                .andExpect(jsonPath("$.errorReason").value("VALIDATION_ERROR"));
     }
 
     @Test
@@ -181,8 +181,7 @@ public class TrackingControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Not Found"));
+                .andExpect(jsonPath("$.errorReason").value("RESOURCE_NOT_FOUND"));
     }
 
     @Test
@@ -208,8 +207,7 @@ public class TrackingControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.status").value(403))
-                .andExpect(jsonPath("$.error").value("Forbidden"));
+                .andExpect(jsonPath("$.errorReason").value("ACCESS_DENIED"));
     }
 
     @Test
@@ -259,7 +257,7 @@ public class TrackingControllerTest {
         mockMvc.perform(delete("/api/v1/trackings/{productId}", productId)
                         .param("userId", userId.toString()))
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.error").value("Forbidden"));
+                .andExpect(jsonPath("$.errorReason").value("ACCESS_DENIED"));
     }
 
     @Test
@@ -321,4 +319,58 @@ public class TrackingControllerTest {
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].productName").value("Test Product"));
     }
+
+    @Test
+    void shouldReturnOk_When_ProductExistsButInactive_Reactivate() throws Exception {
+
+        UUID userId = UUID.randomUUID();
+
+        CreateTrackingRequest request = new CreateTrackingRequest(
+                "https://www.trendyol.com/laptop-p-123",
+                new BigDecimal("14000.00")
+        );
+
+        TrackedProduct reactivatedProduct = TrackedProduct.builder()
+                .id(UUID.randomUUID())
+                .url(request.url())
+                .targetPrice(request.targetPrice())
+                .isActive(true)
+                .build();
+
+        when(trackingUseCase.createTrackedProduct(any(UUID.class), eq(request.url()), eq(request.targetPrice())))
+                .thenReturn(reactivatedProduct);
+
+        mockMvc.perform(post("/api/v1/trackings")
+                        .param("userId", userId.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.url").value(request.url()))
+                .andExpect(jsonPath("$.isActive").value(true))
+                .andExpect(jsonPath("$.targetPrice").value(14000.00));
+    }
+
+    @Test
+    void shouldReturnConflict_When_ProductIsAlreadyActive() throws Exception {
+
+        UUID userId = UUID.randomUUID();
+
+        CreateTrackingRequest request = new CreateTrackingRequest(
+                "https://www.trendyol.com/laptop-p-123",
+                new BigDecimal("15000.00")
+        );
+
+        when(trackingUseCase.createTrackedProduct(any(UUID.class), eq(request.url()), eq(request.targetPrice())))
+                .thenThrow(new ResourceAlreadyExistsException("Tracked Product", "url", request.url()));
+
+        mockMvc.perform(post("/api/v1/trackings")
+                        .param("userId", userId.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.errorReason").value("RESOURCE_ALREADY_EXISTS"))
+                .andExpect(jsonPath("$.message").value(containsString("already exists")));
+    }
+
+
 }

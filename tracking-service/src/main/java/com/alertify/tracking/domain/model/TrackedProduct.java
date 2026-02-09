@@ -42,8 +42,9 @@ public class TrackedProduct {
     private String currency;
     private BigDecimal targetPrice;
     private Boolean isActive;
-    private Instant lastCheckedAt;
     private Instant createdAt;
+    private Instant updatedAt;
+    private Instant lastCheckedAt;
 
     @Builder.Default
     private List<PriceHistory> priceHistory = new ArrayList<>();

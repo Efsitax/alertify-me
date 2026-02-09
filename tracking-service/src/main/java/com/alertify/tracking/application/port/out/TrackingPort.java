@@ -32,6 +32,7 @@ public interface TrackingPort {
     Page<TrackedProduct> findAllByUserId(UUID userId, Pageable pageable);
     List<TrackedProduct> findProductsToScan(Instant threshold, Pageable pageable);
     Optional<TrackedProduct> findByProductId(UUID id);
+    Optional<TrackedProduct> findByUserIdAndUrl(UUID userId, String url);
 
     List<PriceHistory> findPriceHistoryByProductId(UUID productId, Pageable pageable);
 }

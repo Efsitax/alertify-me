@@ -17,6 +17,7 @@
 package com.alertify.tracking.application.service;
 
 import com.alertify.common.exception.AccessDeniedException;
+import com.alertify.common.exception.ResourceAlreadyExistsException;
 import com.alertify.common.exception.ResourceNotFoundException;
 import com.alertify.tracking.application.port.in.ScrapeResultsUseCase;
 import com.alertify.tracking.application.port.in.TrackingUseCase;
@@ -53,15 +54,28 @@ public class TrackingService implements TrackingUseCase, ScrapeResultsUseCase {
             BigDecimal targetPrice
     ) {
 
-        TrackedProduct domain = TrackedProduct.builder()
-                .userId(userId)
-                .url(url)
-                .targetPrice(targetPrice)
-                .isActive(true)
-                .build();
+        TrackedProduct productToSave = productPort.findByUserIdAndUrl(userId, url)
+                .map(existingProduct -> {
+                    if (Boolean.TRUE.equals(existingProduct.getIsActive())) {
+                        throw new ResourceAlreadyExistsException("Tracked Product", "url", url);
+                    }
 
-        TrackedProduct savedProduct = productPort.save(domain);
-        log.info("New tracking created for User: {} with Product ID: {}", userId, savedProduct.getId());
+                    existingProduct.setIsActive(true);
+                    existingProduct.setTargetPrice(targetPrice);
+                    log.info("Re-activating existing tracking for User: {} with Product ID: {}", userId, existingProduct.getId());
+                    return existingProduct;
+                })
+                .orElseGet(() -> {
+                    log.info("Creating new tracking for User: {} with URL: {}", userId, url);
+                    return TrackedProduct.builder()
+                            .userId(userId)
+                            .url(url)
+                            .targetPrice(targetPrice)
+                            .isActive(true)
+                            .build();
+                });
+
+        TrackedProduct savedProduct = productPort.save(productToSave);
         scrapePort.sendScrapeRequest(savedProduct.getId(), savedProduct.getUrl());
 
         return savedProduct;

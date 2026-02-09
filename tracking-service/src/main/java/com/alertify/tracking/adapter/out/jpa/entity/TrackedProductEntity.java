@@ -18,6 +18,8 @@ package com.alertify.tracking.adapter.out.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -30,7 +32,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "tracked_products")
+@EntityListeners(AuditingEntityListener.class)
+@Table(
+        name = "tracked_products",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uc_tracked_product_userid_url",
+                        columnNames = {"user_id", "url"}
+                )
+        }
+)
 public class TrackedProductEntity {
 
     @Id
@@ -42,26 +53,32 @@ public class TrackedProductEntity {
 
     @Column(nullable = false, length = 2048)
     private String url;
+
     private String productName;
     private BigDecimal currentPrice;
     private Boolean inStock;
+
     @Column(length = 3)
     private String currency;
+
     private BigDecimal targetPrice;
     private Boolean isActive;
 
     @Column(updatable = false)
     private Instant createdAt;
+
+    @LastModifiedDate
+    private Instant updatedAt;
+
     private Instant lastCheckedAt;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
     @Builder.Default
-    private List<PriceHistoryEntity> priceHistory= new ArrayList<>();
+    private List<PriceHistoryEntity> priceHistory = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
-
         createdAt = Instant.now();
         if (isActive == null) {
             isActive = true;

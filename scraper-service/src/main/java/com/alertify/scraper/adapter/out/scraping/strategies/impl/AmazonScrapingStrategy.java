@@ -48,7 +48,7 @@ public class AmazonScrapingStrategy implements ScrapingStrategy {
 
             if (page.locator("from[action*='/errors/validateCaptcha']").isVisible() ||
                     page.title().contains("Robot Check")) {
-                throw new ScrapeFailedException("Amazon detected bot/captcha. Retry required.");
+                throw new ScrapeFailedException("Amazon detected bot/captcha. Retry required.", true);
             }
 
             if (page.title().contains("Page Not Found") ||
@@ -57,14 +57,14 @@ public class AmazonScrapingStrategy implements ScrapingStrategy {
             }
             page.waitForSelector("span#productTitle", new Page.WaitForSelectorOptions().setTimeout(10000));
         } catch (TimeoutError e) {
-            throw new ScrapeFailedException("Timeout waiting for product title. Network might be slow.");
+            throw new ScrapeFailedException("Timeout waiting for product title. Network might be slow.", true);
         }
 
         String productName;
         if (page.locator("span#productTitle").isVisible()) {
             productName = page.locator("span#productTitle").innerText();
         } else {
-            throw new ScrapeFailedException("Product title selector not visible. HTML structure might have changed.");
+            throw new ScrapeFailedException("Product title selector not visible. HTML structure might have changed.", false);
         }
 
         BigDecimal price = BigDecimal.ZERO;
@@ -104,11 +104,11 @@ public class AmazonScrapingStrategy implements ScrapingStrategy {
                 price = new BigDecimal(finalPriceString);
 
             } catch (Exception e) {
-                throw new ScrapeFailedException("Failed to parse price text. Format changed?");
+                throw new ScrapeFailedException("Failed to parse price text. Format changed?", false);
             }
         } else {
             if (inStock) {
-                throw new ScrapeFailedException("Product is in stock but price selector not found.");
+                throw new ScrapeFailedException("Product is in stock but price selector not found.", false);
             }
         }
 

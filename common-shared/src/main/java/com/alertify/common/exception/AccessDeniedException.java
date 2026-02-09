@@ -23,6 +23,6 @@ public class AccessDeniedException extends AlertifyException {
     public AccessDeniedException(
             String message
     ) {
-        super(HttpStatus.FORBIDDEN, message);
+        super(HttpStatus.FORBIDDEN, "ACCESS_DENIED", message);
     }
 }

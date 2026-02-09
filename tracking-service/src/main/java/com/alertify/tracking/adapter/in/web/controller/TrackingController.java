@@ -129,8 +129,9 @@ public class TrackingController {
                 domain.getCurrency(),
                 domain.getTargetPrice(),
                 domain.getIsActive(),
-                domain.getLastCheckedAt(),
-                domain.getCreatedAt()
+                domain.getCreatedAt(),
+                domain.getUpdatedAt(),
+                domain.getLastCheckedAt()
         );
     }
 

@@ -34,6 +34,6 @@ public class ScrapingStrategyFactory {
         return strategies.stream()
                 .filter(strategy -> strategy.canScrape(url))
                 .findFirst()
-                .orElseThrow(() -> new ScrapeFailedException("No scraping strategy found for URL: " + url));
+                .orElseThrow(() -> new ScrapeFailedException("No scraping strategy found for URL: " + url, false));
     }
 }

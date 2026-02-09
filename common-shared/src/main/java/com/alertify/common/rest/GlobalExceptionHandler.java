@@ -20,9 +20,11 @@ import com.alertify.common.exception.AlertifyException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -45,6 +47,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
+                ex.getError(),
                 ex.getMessage(),
                 path,
                 LocalDateTime.now()
@@ -66,7 +69,8 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 status.value(),
-                "Validation Error",
+                status.getReasonPhrase(),
+                "VALIDATION_ERROR",
                 errorMessage,
                 path,
                 LocalDateTime.now()
@@ -85,12 +89,57 @@ public class GlobalExceptionHandler {
 
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.UNAUTHORIZED.value(),
-                "Authentication Failed",
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                "AUTHENTICATION_ERROR",
                 ex.getMessage(),
                 null,
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex,
+            WebRequest request
+    ) {
+
+        String message = "Database constraint violation occurred.";
+        if (ex.getMessage() != null) {
+            if (ex.getMessage().contains("users_email_key"))
+                message = "A user with this email already exists.";
+            else if (ex.getMessage().contains("uc_tracked_product_userid_url"))
+                message = "You are already tracking this product URL.";
+        }
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                "DATABASE_CONFLICT",
+                message,
+                request.getDescription(false).replace("uri=", ""),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingParams(
+            MissingServletRequestParameterException ex,
+            WebRequest request
+    ) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String path = request.getDescription(false).replace("uri=", "");
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                status.value(),
+                status.getReasonPhrase(),
+                "MISSING_PARAMETER",
+                String.format("Parameter '%s' is missing", ex.getParameterName()),
+                path,
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(status).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
@@ -104,11 +153,11 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
+                null,
                 "An unexpected error occurred.",
                 path,
                 LocalDateTime.now()
         );
         return ResponseEntity.status(status).body(errorResponse);
     }
-
 }

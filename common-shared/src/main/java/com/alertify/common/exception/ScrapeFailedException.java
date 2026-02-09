@@ -17,12 +17,23 @@
 package com.alertify.common.exception;
 
 import org.springframework.http.HttpStatus;
+import lombok.Getter;
 
-public class ScrapeFailedException extends AlertifyException{
+@Getter
+public class ScrapeFailedException extends AlertifyException {
 
-    public ScrapeFailedException(
-            String message
-    ) {
-        super(HttpStatus.SERVICE_UNAVAILABLE, message);
+    private final boolean isTransient;
+
+    public ScrapeFailedException(String message, boolean isTransient) {
+        super(HttpStatus.SERVICE_UNAVAILABLE, "SCRAPE_FAILED", message);
+        this.isTransient = isTransient;
+    }
+
+    public static ScrapeFailedException rateLimited(String message) {
+        return new ScrapeFailedException("Rate limited: " + message, true);
+    }
+
+    public static ScrapeFailedException hardBlock(String message) {
+        return new ScrapeFailedException("Hard block: " + message, false);
     }
 }

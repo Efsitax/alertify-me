@@ -23,6 +23,6 @@ public class BadCredentialsException extends AlertifyException {
     public BadCredentialsException(
             String message
     ) {
-        super(HttpStatus.UNAUTHORIZED, message);
+        super(HttpStatus.UNAUTHORIZED, "BAD_CREDENTIALS", message);
     }
 }

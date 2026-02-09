@@ -81,8 +81,9 @@ The system consists of 4 fundamental microservices.
         * `currency` (VARCHAR 3)
         * `target_price` (DECIMAL)
         * `is_active` (BOOLEAN)
-        * `last_checked_at` (TIMESTAMP)
         * `created_at` (TIMESTAMP)
+        * `updated_at` (TIMESTAMP)
+        * `last_checked_at` (TIMESTAMP)
     * **`price_histories` (Graph Data):**
         * `id` (UUID, PK)
         * `product_id` (UUID, FK)

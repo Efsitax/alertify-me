@@ -25,6 +25,6 @@ public class ResourceNotFoundException extends AlertifyException {
             String fieldName,
             Object fieldValue
     ) {
-        super(HttpStatus.NOT_FOUND, resourceName + " not found with " + fieldName + " : " + fieldValue);
+        super(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", resourceName + " not found with " + fieldName + " : " + fieldValue);
     }
 }

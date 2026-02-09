@@ -21,15 +21,13 @@ import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.SimpleMessageConverter;
+import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-
-import java.util.List;
 
 @Slf4j
 @Configuration
@@ -101,15 +99,7 @@ public class RabbitMQConfig {
     @Bean
     @Primary
     public MessageConverter converter() {
-
-        SimpleMessageConverter converter = new SimpleMessageConverter();
-        converter.setAllowedListPatterns(List.of(
-                "com.alertify.*",
-                "java.util.*",
-                "java.time.*",
-                "java.math.*",
-                "java.lang.*"));
-        return converter;
+        return new JacksonJsonMessageConverter();
     }
 
     @Bean

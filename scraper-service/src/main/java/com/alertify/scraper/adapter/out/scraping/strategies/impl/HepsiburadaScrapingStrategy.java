@@ -51,7 +51,7 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
             try {
                 page.waitForSelector("h1", new Page.WaitForSelectorOptions().setTimeout(15000));
             } catch (TimeoutError e) {
-                throw new ScrapeFailedException("Timeout waiting for product title. Site might be slow or blocking.");
+                throw new ScrapeFailedException("Timeout waiting for product title. Site might be slow or blocking.", true);
             }
 
             String productName;
@@ -60,7 +60,7 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
             } else if (page.locator("h1").isVisible()) {
                 productName = page.locator("h1").first().innerText();
             } else {
-                throw new ScrapeFailedException("Product title selector not visible.");
+                throw new ScrapeFailedException("Product title selector not visible.", false);
             }
 
             boolean inStock = !page.locator("[data-test-id='out-of-stock-button']").isVisible() &&
@@ -69,7 +69,7 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
             BigDecimal price = tryCustomSelectors(page);
 
             if (inStock && price.compareTo(BigDecimal.ZERO) == 0) {
-                throw new ScrapeFailedException("Product is in stock but price could not be parsed.");
+                throw new ScrapeFailedException("Product is in stock but price could not be parsed.", false);
             }
 
             return ScrapedProduct.builder()
@@ -82,7 +82,7 @@ public class HepsiburadaScrapingStrategy implements ScrapingStrategy {
         } catch (ResourceNotFoundException | ScrapeFailedException e) {
             throw e;
         } catch (Exception e) {
-            throw new ScrapeFailedException("Unexpected error during Hepsiburada scraping: " + e.getMessage());
+            throw new ScrapeFailedException("Unexpected error during Hepsiburada scraping: " + e.getMessage(), false);
         }
     }
 

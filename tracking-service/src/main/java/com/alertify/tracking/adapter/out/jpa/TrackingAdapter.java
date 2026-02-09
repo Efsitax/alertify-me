@@ -80,6 +80,11 @@ public class TrackingAdapter implements TrackingPort {
     }
 
     @Override
+    public Optional<TrackedProduct> findByUserIdAndUrl(UUID userId, String url) {
+        return trackedProductRepository.findByUserIdAndUrl(userId, url).map(trackedProductMapper::toDomain);
+    }
+
+    @Override
     public List<PriceHistory> findPriceHistoryByProductId(
             UUID productId,
             Pageable pageable

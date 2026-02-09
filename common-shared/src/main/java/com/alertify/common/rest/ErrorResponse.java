@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 public record ErrorResponse(
         int status,
         String error,
+        String errorReason,
         String message,
         String path,
         LocalDateTime timestamp

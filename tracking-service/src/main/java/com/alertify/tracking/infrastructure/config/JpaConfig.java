@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package com.alertify.common.exception;
+package com.alertify.tracking.infrastructure.config;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-public class ResourceAlreadyExistsException extends AlertifyException {
-
-    public ResourceAlreadyExistsException(
-            String resourceName,
-            String fieldName,
-            Object fieldValue
-    ) {
-        super(HttpStatus.CONFLICT, "RESOURCE_ALREADY_EXISTS", String.format("%s already exists with %s : %s", resourceName, fieldName, fieldValue));
-    }
+@Configuration
+@EnableJpaAuditing
+public class JpaConfig {
 }

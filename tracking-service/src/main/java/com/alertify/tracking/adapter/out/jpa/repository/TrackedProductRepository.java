@@ -26,6 +26,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -35,4 +36,6 @@ public interface TrackedProductRepository extends JpaRepository<TrackedProductEn
 
     @Query("SELECT p FROM TrackedProductEntity p WHERE p.isActive = true AND (p.lastCheckedAt IS NULL OR p.lastCheckedAt < :threshold)")
     List<TrackedProductEntity> findProductsToScan(@Param("threshold") Instant threshold, Pageable pageable);
+
+    Optional<TrackedProductEntity> findByUserIdAndUrl(UUID userId, String url);
 }
